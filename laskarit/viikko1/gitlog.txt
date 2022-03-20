@@ -1,0 +1,114 @@
+commit 7fcd5e598972751e441c404e85440a639674cc58
+Author: Pia Manns <pia.manns@gmail.com>
+Date:   Fri Mar 18 22:17:38 2022 +0200
+
+    delete file1, rename file2
+
+ tiedostoja/file2.txt                 | 0
+ tiedostoja/{file1.txt => file22.txt} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 10b37c0312c049a18f8cd11b4ba0cee79939181d
+Author: Pia Manns <pia.manns@gmail.com>
+Date:   Fri Mar 18 22:09:13 2022 +0200
+
+    add directory tiedostoja with files
+
+ tiedostoja/file1.txt | 0
+ tiedostoja/file2.txt | 0
+ tiedostoja/file3.txt | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 482b4599006e48f0b472b1b86841e4965ccc98a4
+Author: Pia Manns <pia.manns@gmail.com>
+Date:   Fri Mar 18 22:01:43 2022 +0200
+
+    change eka and kolmas
+
+ eka.txt    | 5 +++--
+ kolmas.txt | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+commit 3fc68741c08d3a9311f9da1dd8ad1ad3248decb1
+Author: Pia Manns <pia.manns@gmail.com>
+Date:   Fri Mar 18 21:47:21 2022 +0200
+
+    rename tiedosto.txt
+
+ tiedosto.txt => eka.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit e097005fef16c779f71c219ee0177c270d305488
+Author: Pia Manns <pia.manns@gmail.com>
+Date:   Fri Mar 18 21:45:48 2022 +0200
+
+    delete toinen.txt
+
+ toinen.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit ca3bb61a70cf682dcf03c67691e4857c98cda4d1
+Author: Pia Manns <pia.manns@gmail.com>
+Date:   Fri Mar 18 21:41:39 2022 +0200
+
+    modify tiedosto.txt
+
+ tiedosto.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit b14ab42c2de71e520dbf3da21882faf37ebaf03f
+Author: Pia Manns <pia.manns@gmail.com>
+Date:   Fri Mar 18 21:38:29 2022 +0200
+
+    add lots of text to tiedosto.txt
+
+ tiedosto.txt | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+commit 7b2cae8b2d18c734620adc1a78216afcb783721d
+Author: Pia Manns <pia.manns@gmail.com>
+Date:   Fri Mar 18 20:59:49 2022 +0200
+
+    add stuff-folder and file
+
+ stuff/neljas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 1735581399872c783df2d3732186651482e44eab
+Author: Pia Manns <pia.manns@gmail.com>
+Date:   Fri Mar 18 20:57:48 2022 +0200
+
+    add changes to toinen.txt and kolmas.txt
+
+ kolmas.txt | 1 +
+ toinen.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit b05b2aabcfeae15350fe327fc02f7ebd9d2b661f
+Author: Pia Manns <pia.manns@gmail.com>
+Date:   Fri Mar 18 20:55:25 2022 +0200
+
+    add kolmas.txt
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 6e094815b6afadce85c2e39b905a5bb1d5af12e9
+Author: Pia Manns <pia.manns@gmail.com>
+Date:   Fri Mar 18 20:49:37 2022 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit 7df8e97bc2b7b1e9bbde912a8b28b0dec5c915e7
+Author: Pia Manns <pia.manns@gmail.com>
+Date:   Thu Mar 17 20:57:04 2022 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+mannspi@Y-C02DP0K3MD6T tiedostoja % 
