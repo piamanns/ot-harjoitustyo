@@ -1,5 +1,10 @@
 # Ohjelmistotekniikka, harjoitustyö
 
-Kurssilla tutustutaan **ohjelmistokehityksen** *periaatteisiin* ja *menetelmiin* sekä toteutetaan pienehkö *harjoitustyö*.
+## Tehtävät
 
+### Viikko 1
+
+[gitlog.txt](/laskarit/viikko1/gitlog.txt)
+
+[komentorivi.txt](/laskarit/viikko1/gitlog.txt)
 
