@@ -1,5 +1,7 @@
 # Ohjelmistotekniikka, harjoitustyö
 
+Kurssilla tutustutaan ohjelmistokehityksen periaatteisiin ja  menetelmiin sekä sovelletaan niitä toteuttamalla pienehkö harjoitustyö. 
+
 ## Tehtävät:
 
 ### Viikko 1
