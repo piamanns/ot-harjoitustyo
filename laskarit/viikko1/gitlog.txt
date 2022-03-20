@@ -112,3 +112,5 @@ Date:   Thu Mar 17 20:57:04 2022 +0200
  tiedosto.txt | 0
  1 file changed, 0 insertions(+), 0 deletions(-)
 mannspi@Y-C02DP0K3MD6T tiedostoja % 
+
+Muutos etärepositoriossa
