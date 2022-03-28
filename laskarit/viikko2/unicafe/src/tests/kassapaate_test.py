@@ -141,3 +141,13 @@ class TestKassapaate(unittest.TestCase):
         maksukortti = Maksukortti(0)
         self.kassapaate.lataa_rahaa_kortille(maksukortti, 1000)
         self.assertEqual(self.kassapaate.kassassa_rahaa, 101000)
+
+    def test_kortin_arvo_ei_muutu_kun_ladattava_summa_negatiivinen(self):
+        maksukortti = Maksukortti(0)
+        self.kassapaate.lataa_rahaa_kortille(maksukortti, -1000)
+        self.assertEqual(maksukortti.saldo, 0)
+    
+    def test_kassan_rahamaara_ei_muutu_kun_kortille_ladattava_summa_negatiivinen(self):
+        maksukortti = Maksukortti(0)
+        self.kassapaate.lataa_rahaa_kortille(maksukortti, -1000)
+        self.assertEqual(self.kassapaate.kassassa_rahaa, 100000)
