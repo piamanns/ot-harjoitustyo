@@ -10,3 +10,6 @@ Kurssilla tutustutaan **ohjelmistokehityksen periaatteisiin ja menetelmiin** sek
 
 [komentorivi.txt](/laskarit/viikko1/gitlog.txt)
 
+### Viikko 2:
+
+[Harjoitustyön vaatimusmäärittely](/dokumentaatio/vaatimusmaarittely.md)
