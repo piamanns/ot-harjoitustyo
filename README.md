@@ -4,7 +4,7 @@ Kurssilla tutustutaan **ohjelmistokehityksen periaatteisiin ja menetelmiin** sek
 
 ## Tehtävät:
 
-### Viikko 1
+### Viikko 1:
 
 [gitlog.txt](/laskarit/viikko1/gitlog.txt)
 
@@ -13,3 +13,5 @@ Kurssilla tutustutaan **ohjelmistokehityksen periaatteisiin ja menetelmiin** sek
 ### Viikko 2:
 
 [Harjoitustyön vaatimusmäärittely](/dokumentaatio/vaatimusmaarittely.md)
+
+[Työaikakirjanpito](/dokumentaatio/tyoaikakirjanpito.md)
