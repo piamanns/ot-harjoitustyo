@@ -1,26 +1,24 @@
 ```mermaid
 sequenceDiagram
-    main ->>+ Machine: Machine()
-    Machine ->>+ FuelTank: FuelTank() 
-    FuelTank -->>- Machine: tank
-    Machine ->> FuelTank: fill(40)
-    Machine ->>+ Engine: Engine(_tank)
-    Engine -->>- Machine: engine    
-    Machine -->>- main: machine
-    main ->> Machine: drive()
-    activate Machine
-    Machine ->> Engine: start()
-    activate Engine
-    Engine ->> FuelTank: consume(5)
-    deactivate Engine
-    Machine ->>+ Engine: is_running()
-    Engine ->>+ FuelTank: fuel_contents()
-    FuelTank -->>- Engine: 35
-    Engine -->>- Machine: running(True)
-    Machine ->>+ Engine:use_energy()
-    Engine ->> FuelTank:consume(10)
-    Engine -->> Machine:  
-    deactivate Engine
-    Machine -->> main: 
-    deactivate Machine
+    main ->>+ machine: Machine()
+    machine ->> tank: FuelTank()
+    machine ->> tank: fill(40)
+    machine ->> engine: Engine(tank)
+    machine -->>- main: 
+    main ->> machine: drive()
+    activate machine
+    machine ->> engine: start()
+    activate engine
+    engine ->> tank: consume(5)
+    deactivate engine
+    machine ->>+ engine: is_running()
+    engine ->>+ tank: fuel_contents()
+    tank -->>- engine: 35
+    engine -->>- machine: running(True)
+    machine ->>+ engine: use_energy()
+    engine ->> tank: consume(10)
+    engine -->> machine:  
+    deactivate engine
+    machine -->> main: 
+    deactivate machine
 ```
