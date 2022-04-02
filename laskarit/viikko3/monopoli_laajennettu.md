@@ -2,7 +2,6 @@
 classDiagram
     Monopoli "1" -- "2" Noppa
     Monopoli "1" -- "2..8" Pelaaja
-    Pelaaja "1" -- "*" Raha
     Monopoli "1" -- "1" Pelilauta
     Monopoli "1" -- "1" Aloitus
     Monopoli "1" -- "1" Vankila
@@ -27,9 +26,12 @@ classDiagram
     Yhteismaa ..> Kortti
     Kortti "*" -- "1" Toiminto
     Ruutu "*" -- "1" Toiminto
-    Pelaaja "1" -- "*" Asema
-    Pelaaja "1" -- "*" Laitos
-    Pelaaja "1" -- "*" Katu 
+    Pelaaja "1" -- "*" Raha
+    Pelaaja "1" -- "0..4" Asema
+    Pelaaja "1" -- "0..2" Laitos
+    Pelaaja "1" -- "0..22" Katu 
+    Katu "1" -- "1..4" Talo
+    Katu "1" -- "1" Hotelli
   
   class Katu {
       nimi
