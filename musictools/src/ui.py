@@ -16,8 +16,8 @@ class UI:
             text="Tuning Fork\n(A, 440 Hz)",
             fg="black",
             bg="yellow",
-            width=20,
-            height=10
+            width=30,
+            height=20
         )
 
         btn_play = tk.Button(

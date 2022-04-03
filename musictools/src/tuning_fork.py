@@ -14,7 +14,7 @@ class TuningFork:
         return (math.sin(value) for value in itertools.count(start=0, step=incr))
 
     def _get_samples(self, oscillator):
-        return [int(next(oscillator) * 32767) for i in range(512)]
+        return [int(next(oscillator) * 32767) for i in range(256)]
     
     def _callback(self, outdata, frames, time, status):
         if status:
@@ -23,8 +23,8 @@ class TuningFork:
         outdata[:] = np.int16(samples).tobytes()
       
     def start(self):
-        self._stream = sd.RawOutputStream(channels=1, callback=self._callback, 
-                                          samplerate=44100, dtype="int16")
+        self._stream = sd.RawOutputStream(channels=1, callback=self._callback, dtype="int16", 
+                                          blocksize=256, samplerate=44100)
         self._stream.start()
     
     def stop(self):
