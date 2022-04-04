@@ -1,5 +1,3 @@
-import math
-import itertools
 import sounddevice as sd
 import numpy as np
 
@@ -31,9 +29,7 @@ class TuningFork:
         return self._stream and self._stream.active
     
     def set_frequency(self, freq: float):
-        try: 
-            self._frequency = float(freq)
-        except ValueError("Frequency must be a number"):
-            pass
+        self._frequency = float(freq)
     
-    
+    def get_frequency(self):
+        return self._frequency
