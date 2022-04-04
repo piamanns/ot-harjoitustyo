@@ -5,30 +5,35 @@ import numpy as np
 
 
 class TuningFork:
-    def __init__(self):
-        self._oscillator = self._get_sine_oscillator()
+    def __init__(self, frequency=440):
+        self._frequency = frequency
+        self._sample_rate = 44100
         self._stream = None
+        self._start_idx = 0
 
-    def _get_sine_oscillator(self, frequency=440, sample_rate=44100):
-        incr = (2 * math.pi * frequency) / sample_rate
-        return (math.sin(value) for value in itertools.count(start=0, step=incr))
-
-    def _get_samples(self, oscillator):
-        return [int(next(oscillator) * 32767) for i in range(256)]
-    
     def _callback(self, outdata, frames, time, status):
         if status:
             print(status)
-        samples = self._get_samples(self._oscillator)
-        outdata[:] = np.int16(samples).tobytes()
+        t = (self._start_idx + np.arange(frames)) / 44100
+        t = t.reshape(-1, 1)
+        outdata[:] = np.sin(2 * np.pi * self._frequency * t)
+        self._start_idx += frames
       
     def start(self):
-        self._stream = sd.RawOutputStream(channels=1, callback=self._callback, dtype="int16", 
-                                          blocksize=256, samplerate=44100)
+        self._stream = sd.OutputStream(channels=1, callback=self._callback, samplerate=44100)
         self._stream.start()
     
     def stop(self):
         self._stream.stop()
-    
+        self._start_idx = 0
+
     def is_active(self):
         return self._stream and self._stream.active
+    
+    def set_frequency(self, freq: float):
+        try: 
+            self._frequency = float(freq)
+        except ValueError("Frequency must be a number"):
+            pass
+    
+    
