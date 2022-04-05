@@ -1,17 +1,49 @@
-# Ohjelmistotekniikka, harjoitustyö
+# Musictools
 
-Kurssilla tutustutaan **ohjelmistokehityksen periaatteisiin ja menetelmiin** sekä sovelletaan niitä toteuttamalla pienehkö *harjoitustyö*. 
+Sovellus sisältää muutamia muusiikin harrastajalle hyödyllisiä työkaluja, kuten viritysäänen tuottavan digitaalisen **ääniraudan** ja **metronomin**.
 
-## Tehtävät:
+## Python-versio
 
-### Viikko 1:
+Sovelluksen toimivuus on testattu Python-versiolla 3.8.
 
-[gitlog.txt](/laskarit/viikko1/gitlog.txt)
+## Dokumentaatio
 
-[komentorivi.txt](/laskarit/viikko1/gitlog.txt)
+- [Vaatimusmäärittely](/musictools/dokumentaatio/vaatimusmaarittely.md) 
+- [Työaikakirjanpito](/musictools/dokumentaatio/tyoaikakirjanpito.md)
+- [Changelog](/musictools/dokumentaatio/changelog.md)
 
-### Viikko 2:
+## Sovelluksen asentaminen ja käynnistäminen
 
-[Harjoitustyön vaatimusmäärittely](/dokumentaatio/vaatimusmaarittely.md)
+1. Asenna sovelluksen riippuvuudet komentoriviltä komennolla
 
-[Työaikakirjanpito](/dokumentaatio/tyoaikakirjanpito.md)
+```bash
+poetry install
+```
+
+2. Käynnistä sovellus komennolla
+
+```bash
+poetry run invoke start
+```
+
+## Muut komentorivitoiminnot
+
+### Testaus
+
+Suorita automaattiset testit komennolla:
+
+```bash
+poetry run invoke test
+```
+
+### Testikattavuus
+
+Generoi testikattavuusraportti komennolla:
+
+```bash
+poetry run invoke coverage-report
+```
+
+Generoitu raportti löytyy sovelluksen juurihakemistoon syntyvästä hakemistosta _htmlcov_.
+Tarkastele raporttia avamalla tiedosto _index.html_ selaimeen.
+
