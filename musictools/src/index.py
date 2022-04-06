@@ -5,8 +5,8 @@ def main():
     window = tk.Tk()
     window.title("Musictools")
 
-    ui = UI(window)
-    ui.start()
+    ui_view = UI(window)
+    ui_view.start()
 
     window.mainloop()
 
