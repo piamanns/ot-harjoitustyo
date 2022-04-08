@@ -1,5 +1,5 @@
 import tkinter as tk
-from ui import UI
+from ui.ui import UI
 
 def main():
     window = tk.Tk()

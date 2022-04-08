@@ -2,16 +2,25 @@ import tkinter as tk
 from tkinter import ttk
 from tuning_fork import TuningFork
 
-class UI:
+
+class TuningForkView:
     def __init__(self, root):
         self._root = root
+        self._frame = None
         self._tuning_fork = TuningFork()
         self._var_freq_txt = None
         self._var_entry_txt = None
         self._var_play_txt = None
         self._ent_freq = None
 
-    def start(self):
+        self._initialize()        
+
+    def pack(self):
+        self._frame.pack()
+
+    def _initialize(self):
+        self._frame = ttk.Frame(master=self._root)
+
         self._var_freq_txt = tk.StringVar()
         self._var_freq_txt.set("Tuning Fork\n(440 Hz)")
         self._var_entry_txt = tk.StringVar()
@@ -20,7 +29,7 @@ class UI:
         self._var_play_txt.set("Play")
 
         lbl_tuningfork = tk.Label(
-            master=self._root,
+            master=self._frame,
             textvariable=self._var_freq_txt,
             fg="black",
             bg="yellow",
@@ -28,45 +37,45 @@ class UI:
         )
 
         btn_play = tk.Button(
-            master=self._root,
+            master=self._frame,
             textvariable=self._var_play_txt,
             pady=5,
             command=self._handle_play_btn_click
         )
 
         self._ent_freq = ttk.Entry(
-            master=self._root,
+            master=self._frame,
             textvariable=self._var_entry_txt
         )
 
         btn_set = tk.Button(
-            master=self._root,
+            master=self._frame,
             text="Set",
             pady=5,
             command=self._handle_set_btn_click
         )
 
         lbl_presets = ttk.Label(
-            master=self._root,
+            master=self._frame,
             text="Presets:"
         )
 
         btn_a = tk.Button(
-            master=self._root,
+            master=self._frame,
             text="A (440 Hz)",
             pady=5,
             command=lambda: self._handle_preset_btn_click("A")
         )
 
         btn_d = tk.Button(
-            master=self._root,
+            master=self._frame,
             text="D (293.66Hz)",
             pady=5,
             command=lambda: self._handle_preset_btn_click("D")
         )
 
         btn_g = tk.Button(
-            master=self._root,
+            master=self._frame,
             text="G (196 Hz)",
             pady=5,
             command=lambda: self._handle_preset_btn_click("G")
@@ -112,3 +121,4 @@ class UI:
         label_text = f"Tuning Fork\n({freq} Hz)"
         self._var_freq_txt.set(label_text)
         self._tuning_fork.set_frequency(freq)
+       
