@@ -7,4 +7,5 @@
 | 4.4. | 8 |  Muutoksia siniaalloon tuottamiseen. Käyttöliittymän laajentaminen: viritysäänen voi asettaa syöttämällä frekvenssin tekstikenttään tai preset-nappeja painamalla. Sovelluksen testaamista virtuaalityöasemalla. Ensimmäinen yksikkötesti.|
 | 6.4 | 1 | Pylintin asennus ja pylint-virheiden korjausta.|
 | 8.4 | 2 | Ui-näkymien refaktorointia. Ääniraudan asetusten tallennuksen suunnittelua.| 
-| yht | 22 | |
+| 9.4 | 5 | Sovelluslogiikan eriyttäminen käyttöliittymästä. Ympäristömuuttujat käyttöön. Toteutus ääniraudan asetusten lukemiselle/tallentamiselle, toistaiseksi csv-tiedoston avulla.
+| yht | 27 | |
