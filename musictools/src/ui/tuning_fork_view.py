@@ -1,20 +1,20 @@
 import tkinter as tk
 from tkinter import ttk
-from tuning_fork import TuningFork
+from services.musictools_service import mt_service
 
 
 class TuningForkView:
     def __init__(self, root):
         self._root = root
         self._frame = None
-        self._tuning_fork = TuningFork()
         self._var_freq_txt = None
         self._var_entry_txt = None
         self._var_play_txt = None
         self._ent_freq = None
+        self._presets = []
 
-        self._initialize()        
-
+        self._initialize() 
+  
     def pack(self):
         self._frame.pack()
 
@@ -92,11 +92,11 @@ class TuningForkView:
         btn_play.grid(columnspan=3, pady=3)
 
     def _handle_play_btn_click(self):
-        if self._tuning_fork.is_active():
-            self._tuning_fork.stop()
+        if mt_service.tfork_is_active():
+            mt_service.tfork_stop()
             self._var_play_txt.set("Play")
         else:
-            self._tuning_fork.start()
+            mt_service.tfork_start()
             self._var_play_txt.set("Stop")
 
     def _handle_set_btn_click(self):
@@ -120,5 +120,5 @@ class TuningForkView:
     def _update_tuning_fork(self, freq: float):
         label_text = f"Tuning Fork\n({freq} Hz)"
         self._var_freq_txt.set(label_text)
-        self._tuning_fork.set_frequency(freq)
+        mt_service.tfork_set_freq(freq)
        
