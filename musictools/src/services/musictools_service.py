@@ -22,7 +22,6 @@ class MusictoolsService:
         return tf_preset_repository.get_all()
 
     def tfork_save_preset(self, preset):
-        return tf_preset_repository.save(preset)
-
+        tf_preset_repository.save(preset)
 
 mt_service = MusictoolsService()
