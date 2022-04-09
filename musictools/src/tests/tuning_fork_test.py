@@ -1,6 +1,7 @@
 import unittest
 from tuning_fork import TuningFork
 
+
 class TestTuningFork(unittest.TestCase):
     def setUp(self):
         self.tuning_fork = TuningFork()

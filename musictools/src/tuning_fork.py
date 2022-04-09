@@ -11,14 +11,15 @@ class TuningFork:
 
     def _callback(self, outdata, frames, time, status):
         if status:
-            print(status)
-        t = (self._start_idx + np.arange(frames)) / self._sample_rate
-        t = t.reshape(-1, 1)
-        outdata[:] = np.sin(2 * np.pi * self._frequency * t)
+            print(time, status)
+        section = (self._start_idx + np.arange(frames)) / self._sample_rate
+        section = section.reshape(-1, 1)
+        outdata[:] = np.sin(2 * np.pi * self._frequency * section)
         self._start_idx += frames
 
     def start(self):
-        self._stream = sd.OutputStream(channels=1, callback=self._callback, samplerate=44100)
+        self._stream = sd.OutputStream(
+            channels=1, callback=self._callback, samplerate=44100)
         self._stream.start()
 
     def stop(self):
