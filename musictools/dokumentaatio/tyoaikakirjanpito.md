@@ -8,4 +8,5 @@
 | 6.4 | 1 | Pylintin asennus ja pylint-virheiden korjausta.|
 | 8.4 | 2 | Ui-näkymien refaktorointia. Ääniraudan asetusten tallennuksen suunnittelua.| 
 | 9.4 | 5 | Sovelluslogiikan eriyttäminen käyttöliittymästä. Ympäristömuuttujat käyttöön. Toteutus ääniraudan asetusten lukemiselle/tallentamiselle, toistaiseksi csv-tiedoston avulla.
-| yht | 27 | |
+| 10.4 | 6 | Toteutus ääniraudan tallennettujen asetuksien poistamiselle. Alustava käyttöliittymä ääniraudan asetusten hallinnoimiselle. 
+| yht | 33 | |
