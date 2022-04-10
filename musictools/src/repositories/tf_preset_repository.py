@@ -1,5 +1,6 @@
 from pathlib import Path
 from config import TF_PRESETS_PATH
+from entities.tf_preset import TfPreset
 
 
 class TfPresetRepository:
@@ -15,6 +16,11 @@ class TfPresetRepository:
         presets = self.__read_presets()
         presets.append(tf_preset)
         self.__write_presets(presets)
+
+    def delete(self, preset_id):
+        presets = self.__read_presets()
+        presets_updated = [preset for preset in presets if preset.id != preset_id]
+        self.__write_presets(presets_updated)
         
     def __read_presets(self):
         presets = []
@@ -23,13 +29,16 @@ class TfPresetRepository:
             for row in file:
                 row = row.strip()
                 parts = row.split(";")
-                presets.append((parts[0], parts[1]))
+                id = parts[0]
+                freq = parts[1]
+                label = parts[2]
+                presets.append(TfPreset(freq, label, id))
             
             return presets
                 
     def __write_presets(self, presets):
         with open(self.__tf_presets_path, "w", encoding="utf-8") as file:
             for preset in presets:
-                file.write(f"{preset[0]};{preset[1]}\n")
+                file.write(f"{preset.id};{preset.freq};{preset.label}\n")
     
 tf_preset_repository = TfPresetRepository(TF_PRESETS_PATH)
