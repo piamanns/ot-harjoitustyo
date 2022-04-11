@@ -1,6 +1,6 @@
+from entities.tf_preset import TfPreset
 from entities.tuning_fork import TuningFork
 from repositories.tf_preset_repository import tf_preset_repository
-from entities.tf_preset import TfPreset
 
 
 class MusictoolsService:
@@ -25,7 +25,7 @@ class MusictoolsService:
     def tfork_save_preset(self, freq: float, label: str):
         preset = TfPreset(freq, label)
         tf_preset_repository.save(preset)
-    
+
     def tfork_delete_preset(self, preset_id: str):
         tf_preset_repository.delete(preset_id)
 

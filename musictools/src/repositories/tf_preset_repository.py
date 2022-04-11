@@ -5,7 +5,7 @@ from entities.tf_preset import TfPreset
 
 class TfPresetRepository:
     def __init__(self, tf_presets_path: str):
-        self.__tf_presets_path = tf_presets_path        
+        self.__tf_presets_path = tf_presets_path
         #self.__tf_presets = [(440, "A"), (293.66, "D"),
                              #(196, "G"), (659.25, "E"), (466.16, "Bb")]
     def get_all(self):
@@ -21,7 +21,7 @@ class TfPresetRepository:
         presets = self.__read_presets()
         presets_updated = [preset for preset in presets if preset.id != preset_id]
         self.__write_presets(presets_updated)
-        
+
     def __read_presets(self):
         presets = []
 
@@ -29,16 +29,16 @@ class TfPresetRepository:
             for row in file:
                 row = row.strip()
                 parts = row.split(";")
-                id = parts[0]
+                preset_id = parts[0]
                 freq = parts[1]
                 label = parts[2]
-                presets.append(TfPreset(freq, label, id))
-            
+                presets.append(TfPreset(freq, label, preset_id))
+
             return presets
-                
+
     def __write_presets(self, presets):
         with open(self.__tf_presets_path, "w", encoding="utf-8") as file:
             for preset in presets:
                 file.write(f"{preset.id};{preset.freq};{preset.label}\n")
-    
+
 tf_preset_repository = TfPresetRepository(TF_PRESETS_PATH)

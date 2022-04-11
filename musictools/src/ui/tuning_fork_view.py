@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import LEFT, NS, VERTICAL, ttk
 from services.musictools_service import mt_service
 
 
@@ -9,7 +9,7 @@ class TuningForkView:
         self._frm_main = None
         self._frm_presets = None
         self._frm_preset_buttons = None
-        self._frm_presets_settings = None
+        self._frm_settings = None
         self._var_freq_txt = None
         self._var_entry_txt = None
         self._var_play_txt = None
@@ -24,127 +24,172 @@ class TuningForkView:
     def _initialize(self):
         self._presets = mt_service.tfork_get_presets()
         self._frm_main = ttk.Frame(master=self._root)
-        self._frm_presets = ttk.Frame(master=self._frm_main)
- 
+
+        self._init_frm_header()
+        self._init_frm_freq_entry()
+        self._init_frm_play_button()
+        self._init_frm_presets()
+        self._init_frm_presets_settings()
+
+    def _init_frm_header(self):
+        frm_header = tk.Frame(master=self._frm_main)
+        frm_header.configure(bg="yellow")
+
         self._var_freq_txt = tk.StringVar()
         self._var_freq_txt.set("Tuning Fork\n(440 Hz)")
-        self._var_entry_txt = tk.StringVar()
-        self._var_entry_txt.set("(enter frequency)")
-        self._var_play_txt = tk.StringVar()
-        self._var_play_txt.set("Play")
 
         lbl_tuningfork = tk.Label(
-            master=self._frm_main,
+            master=frm_header,
             textvariable=self._var_freq_txt,
             fg="black",
             bg="yellow",
             height=20
         )
 
-        btn_play = tk.Button(
-            master=self._frm_main,
-            textvariable=self._var_play_txt,
-            pady=5,
-            command=self._handle_play_btn_click
-        )
+        lbl_tuningfork.pack()        
+        frm_header.grid(sticky=(tk.W, tk.E))
+
+    def _init_frm_freq_entry(self):
+        frm_freq_entry = ttk.Frame(master=self._frm_main)
+
+        self._var_entry_txt = tk.StringVar()
+        self._var_entry_txt.set("(enter frequency)")
 
         self._ent_freq = ttk.Entry(
-            master=self._frm_main,
-            textvariable=self._var_entry_txt
+            master=frm_freq_entry,
+            textvariable=self._var_entry_txt        
         )
 
         btn_set = tk.Button(
-            master=self._frm_main,
+            master=frm_freq_entry,
             text="Set",
             pady=5,
             command=self._handle_set_btn_click
         )
 
         btn_save = tk.Button(
-            master=self._frm_main,
+            master=frm_freq_entry,
             text="Save",
             pady=5,
             command=self._handle_save_btn_click
         )
 
-        lbl_tuningfork.grid(columnspan=3, sticky=(tk.constants.W, tk.constants.E))
-        self._ent_freq.grid(row=1, column=0, sticky=(tk.constants.W, tk.constants.E), pady=3)
-        btn_set.grid(row=1, column=1)
-        btn_save.grid(row=1, column=2)
-        btn_play.grid(columnspan=3, pady=3)
-        self._init_frm_presets()
-        self._frm_presets.grid(columnspan=3)
+        self._ent_freq.grid(row=0, column=0, pady=3)       
+        btn_set.grid(row=0, column=1)
+        btn_save.grid(row=0, column=2)
+        
+        frm_freq_entry.grid()
+
+    def _init_frm_play_button(self):
+        frm_play_button = ttk.Frame(master=self._frm_main)  
+
+        self._var_play_txt = tk.StringVar()
+        self._var_play_txt.set("Play")
+
+        btn_play = tk.Button(
+            master=frm_play_button,
+            textvariable=self._var_play_txt,
+            pady=5,
+            command=self._handle_play_btn_click
+        )
+
+        btn_play.pack()
+        frm_play_button.grid()
 
     def _init_frm_presets(self):
+        self._frm_presets = ttk.Frame(master=self._frm_main)
+        frm_presets_header = ttk.Frame(master=self._frm_presets)
+
         lbl_presets = ttk.Label(
-            master=self._frm_presets,
+            master=frm_presets_header,
             text="Presets:"
         )
 
-        btn_presets_manage = tk.Button(
-            master=self._frm_presets,
+        btn_settings_open = tk.Button(
+            master=frm_presets_header,
             text="Manage",
             pady=5,
-            command=self._handle_presets_manage_btn_click
+            command=self._handle_settings_open_btn_click
         )
-        self._frm_presets.columnconfigure(1, weight=1)
-        lbl_presets.grid(row=0, column=0, sticky=tk.constants.W)
-        btn_presets_manage.grid(row=0, column=1, sticky=tk.constants.W)
+        lbl_presets.pack(side=LEFT)
+        btn_settings_open.pack(side=LEFT)
+        frm_presets_header.grid()
+
         self._init_preset_buttons()
+        self._frm_presets.grid()
 
     def _init_preset_buttons(self):
-        print("Init preset buttons")
         self._frm_preset_buttons = ttk.Frame(master=self._frm_presets)
 
-        pos = 0
-        cols = 3
+        if len(self._presets) > 0:
+            pos = 0
+            cols = 3
 
-        for preset in self._presets:
-            btn = tk.Button(
+            for preset in self._presets:
+                btn = tk.Button(
+                    master=self._frm_preset_buttons,
+                    text=f"{preset.label} ({preset.freq} Hz)",
+                    pady=5,
+                    command=lambda freq=preset.freq: self._handle_preset_btn_click(
+                        freq)
+                )
+                btn.grid(column=pos % cols, row=pos//cols)
+                pos += 1
+        else:
+            lbl_no_presets = tk.Label(
                 master=self._frm_preset_buttons,
-                text=f"{preset.label} ({preset.freq} Hz)",
-                pady=5,
-                command=lambda freq=preset.freq: self._handle_preset_btn_click(
-                    freq)
+                text="(No presets)"
             )
-            btn.grid(column=pos % cols, row=pos//cols)
-            pos += 1
-        self._frm_preset_buttons.grid(columnspan=2)
+            lbl_no_presets.grid(sticky=tk.W)
 
+        self._frm_preset_buttons.grid()
 
     def _init_frm_presets_settings(self):
-        self._frm_presets_settings = ttk.Frame(master=self._frm_presets)
+        self._frm_settings = ttk.Frame(master=self._frm_main)
+        frm_settings_header = ttk.Frame(master=self._frm_settings)
 
         lbl_presets_settings = ttk.Label(
-            master=self._frm_presets_settings,
+            master=frm_settings_header,
             text="Manage presets:"
         )
 
-        btn_presets_settings_close = tk.Button(
-            master=self._frm_presets_settings,
+        btn_settings_close = tk.Button(
+            master=frm_settings_header,
             text="Close",
             pady=5,
-            command=self._handle_presets_settings_close_btn_click
+            command=self._handle_settings_close_btn_click
         )
 
-        lbl_presets_settings.grid(row=0, column=0, sticky=tk.constants.W)
-        btn_presets_settings_close.grid(row=0, column=1, sticky=tk.constants.W)
-   
-        row = 1
-        for preset in self._presets:
-            lbl = ttk.Label(
-                master=self._frm_presets_settings,
-                text=f"{preset.label} ({preset.freq} Hz)",
+        lbl_presets_settings.pack(side=LEFT)
+        btn_settings_close.pack(side=LEFT)
+        frm_settings_header.grid(row=0, column=0)
 
+        frm_settings_buttons = ttk.Frame(master=self._frm_settings)
+        
+        if len(self._presets) > 0:
+            row = 1
+            for preset in self._presets:
+                lbl = ttk.Label(
+                    master=frm_settings_buttons,
+                    text=f"{preset.label} ({preset.freq} Hz)",
+
+                )
+                btn = tk.Button(
+                    master=frm_settings_buttons,
+                    text="Delete",
+                    command=lambda id=preset.id: self._handle_preset_delete_btn_click(id)
+                )
+                lbl.grid(row=row, column=0)
+                btn.grid(row=row, column=1)
+                row += 1
+        else:
+            lbl_no_presets = tk.Label(
+                master=frm_settings_buttons,
+                text="(No presets)"
             )
-            btn = tk.Button(
-                master=self._frm_presets_settings,
-                text="Delete",
-                command=lambda id=preset.id: self._handle_preset_delete_btn_click(id)
-            )
-            lbl.grid(row=row, column=0)
-            btn.grid(row=row, column=1)
-            row += 1
+            lbl_no_presets.grid(sticky=tk.W)
+
+        frm_settings_buttons.grid()
 
     def _update_tuning_fork(self, freq: float):
         label_text = f"Tuning Fork\n({freq} Hz)"
@@ -171,18 +216,14 @@ class TuningForkView:
         self._presets = mt_service.tfork_get_presets()
         self._update_preset_views()
     
-    def _handle_presets_manage_btn_click(self):
-        print("Open preset settings")
-        if not self._frm_presets_settings:
-            self._init_frm_presets_settings()
-        if not self._frm_presets_settings.winfo_ismapped():
-            self._frm_presets_settings.grid()
+    def _handle_settings_open_btn_click(self):
+        if not self._frm_settings.winfo_ismapped():
+            self._frm_settings.grid()  
         else:
             print("Window is already open")
 
-    def _handle_presets_settings_close_btn_click(self):
-        print("Close preset settings")
-        self._frm_presets_settings.grid_forget()
+    def _handle_settings_close_btn_click(self):
+        self._frm_settings.grid_forget()
 
     def _handle_preset_btn_click(self, freq: float):
         self._update_tuning_fork(freq)
@@ -194,12 +235,11 @@ class TuningForkView:
         self._update_preset_views()
     
     def _update_preset_views(self):
-        print("Update all preset views")
         self._frm_preset_buttons.destroy()
         self._init_preset_buttons()
-        if self._frm_presets_settings and self._frm_presets_settings.winfo_ismapped():
-            # Preset-managing view is open
-            self._frm_presets_settings.destroy()
-            self._init_frm_presets_settings()
-            self._frm_presets_settings.grid()
+        settings_view_open = self._frm_settings.winfo_ismapped()
+        self._frm_settings.destroy()
+        self._init_frm_presets_settings()
+        if settings_view_open:
+            self._frm_settings.grid()
 
