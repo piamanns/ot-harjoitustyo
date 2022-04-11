@@ -1,5 +1,5 @@
 import unittest
-from tuning_fork import TuningFork
+from entities.tuning_fork import TuningFork
 
 
 class TestTuningFork(unittest.TestCase):
