@@ -132,7 +132,7 @@ class TuningForkView:
             for preset in self._presets:
                 btn = tk.Button(
                     master=self._frm_preset_buttons,
-                    text=f"{preset.label} ({preset.freq} Hz)",
+                    text=f"{preset.freq} Hz",
                     pady=5,
                     command=lambda freq=preset.freq: self._handle_preset_btn_click(
                         freq)
@@ -175,7 +175,7 @@ class TuningForkView:
             for preset in self._presets:
                 lbl = ttk.Label(
                     master=frm_settings_buttons,
-                    text=f"{preset.label} ({preset.freq} Hz)",
+                    text=f"({preset.freq} Hz)",
 
                 )
                 btn = tk.Button(
