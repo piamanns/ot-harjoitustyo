@@ -9,5 +9,5 @@
 | 8.4 | 2 | Ui-näkymien refaktorointia. Ääniraudan asetusten tallennuksen suunnittelua.| 
 | 9.4 | 5 | Sovelluslogiikan eriyttäminen käyttöliittymästä. Ympäristömuuttujat käyttöön. Toteutus ääniraudan asetusten lukemiselle/tallentamiselle, toistaiseksi csv-tiedoston avulla.
 | 10.4 | 6 | Toteutus ääniraudan tallennettujen asetuksien poistamiselle. Alustava käyttöliittymä ääniraudan asetusten hallinnoimiselle. 
-| 11.4 | 5 | Ääniraudan käyttöliittymän refaktorointia ja viilausta virtuaalityöasemalla. Tkinterin kanssa painimista.|
-| yht | 38 | |
+| 11.4 | 6 | Ääniraudan käyttöliittymän refaktorointia ja viilausta virtuaalityöasemalla. Tkinterin kanssa painimista. Syötetyn taajuuden validointi ja virheilmoituksen näyttäminen.|
+| yht | 39 | |
