@@ -10,9 +10,11 @@ class TuningForkView:
         self._frm_presets = None
         self._frm_preset_buttons = None
         self._frm_settings = None
+        self._lbl_error = None
         self._var_freq_txt = None
         self._var_entry_txt = None
         self._var_play_txt = None
+        self._var_error_txt = None
         self._ent_freq = None
         self._presets = []
 
@@ -26,10 +28,29 @@ class TuningForkView:
         self._frm_main = ttk.Frame(master=self._root)
 
         self._init_frm_header()
+        self._init_lbl_error()
         self._init_frm_freq_entry()
         self._init_frm_play_button()
         self._init_frm_presets()
         self._init_frm_presets_settings()
+
+        self._hide_error()
+
+    def _init_lbl_error(self):
+        self._var_error_txt = tk.StringVar()
+        self._lbl_error = ttk.Label(
+            master=self._frm_main,
+            textvariable=self._var_error_txt,
+            foreground="red"
+        )
+        self._lbl_error.grid()
+    
+    def _show_error(self, message):
+        self._var_error_txt.set(message)
+        self._lbl_error.grid()
+
+    def _hide_error(self):
+        self._lbl_error.grid_remove()
 
     def _init_frm_header(self):
         frm_header = tk.Frame(master=self._frm_main)
@@ -209,20 +230,34 @@ class TuningForkView:
             self._var_play_txt.set("Stop")
 
     def _handle_set_btn_click(self):
-        try:
-            freq = float(self._ent_freq.get())
+        freq = self._validate_frequency(self._ent_freq.get())
+        if freq:  
             self._update_tuning_fork(freq)
-        except ValueError:
-            print("Frequency must be a number")
-
+            if self._lbl_error.winfo_ismapped:
+                self._hide_error()
+      
     def _handle_save_btn_click(self):
-        mt_service.tfork_save_preset(self._ent_freq.get(), "?")
-        self._presets = mt_service.tfork_get_presets()
-        self._update_preset_views()
+        freq = self._validate_frequency(self._ent_freq.get())
+        if freq:
+            mt_service.tfork_save_preset(freq, "?")
+            self._presets = mt_service.tfork_get_presets()
+            self._update_preset_views()
+            if self._lbl_error.winfo_ismapped:
+                self._hide_error()
+      
+    def _validate_frequency(self, freq: float):
+        try:
+            freq = float(freq)
+            if freq >= 20 and freq <= 8000:
+               return freq
+        except ValueError:
+            pass
+        self._show_error("Allowed frequencies: 20-8000 Hz")
+        return None
     
     def _handle_settings_open_btn_click(self):
         if not self._frm_settings.winfo_ismapped():
-            self._frm_settings.grid(sticky=(tk.W, tk.E))  
+            self._show_settings()
 
     def _handle_settings_close_btn_click(self):
         self._frm_settings.grid_remove()
@@ -243,5 +278,7 @@ class TuningForkView:
         self._frm_settings.destroy()
         self._init_frm_presets_settings()
         if settings_view_open:
-            self._frm_settings.grid(sticky=(tk.W, tk.E))
-
+            self._show_settings()
+    
+    def _show_settings(self):
+        self._frm_settings.grid(sticky=(tk.W, tk.E))  
