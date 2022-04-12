@@ -5,9 +5,6 @@
 ### Keskeiset luokat:
 ```mermaid
 classDiagram
-    TuningFork "1" --> "*" TfPreset
-    Metronome "1" --> "*" MetrPreset
-    
     class TuningFork{   
         +start()
         +stop()
