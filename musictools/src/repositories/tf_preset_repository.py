@@ -21,6 +21,9 @@ class TfPresetRepository:
         presets = self.__read_presets()
         presets_updated = [preset for preset in presets if preset.id != preset_id]
         self.__write_presets(presets_updated)
+    
+    def delete_all(self):
+        self.__write_presets([])
 
     def __read_presets(self):
         presets = []
@@ -30,7 +33,7 @@ class TfPresetRepository:
                 row = row.strip()
                 parts = row.split(";")
                 preset_id = parts[0]
-                freq = parts[1]
+                freq = float(parts[1])
                 label = parts[2]
                 presets.append(TfPreset(freq, label, preset_id))
 

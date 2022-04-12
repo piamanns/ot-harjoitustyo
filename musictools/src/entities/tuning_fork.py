@@ -27,10 +27,13 @@ class TuningFork:
         self._start_idx = 0
 
     def is_active(self):
-        return self._stream and self._stream.active
+        return True if self._stream and self._stream.active else False
 
     def set_frequency(self, freq: float):
-        self._frequency = float(freq)
+        try: 
+            self._frequency = float(freq)
+        except ValueError:
+            pass
 
     def get_frequency(self):
         return self._frequency

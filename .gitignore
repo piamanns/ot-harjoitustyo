@@ -3,3 +3,4 @@ __pycache__
 .coverage
 htmlcov
 musictools/data/tf_presets.csv
+musictools/data/test_tf_presets.csv
