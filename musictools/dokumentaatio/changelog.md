@@ -10,7 +10,8 @@
 - Lisätty käyttäjälle mahdollisuus tallentaa ja poistaa esiasetettuja viritysääniä.
 - Kun sovellus käynnistyy, tallennetut viritysäänet näkyvät nappeina käyttöliittymässä.
 - Esiasetuksille luotu oma TfPresets-luokka. 
-- Asetukset tallenneetaan toistaiseksi CSV-tiedostoon.
+- Asetusten tallennus toistaiseksi CSV-tiedostoon.
 - Sovelluslogiikka eriytetty MusictoolsServices-luokkaan.
 - Graafista käyttöliittymää refaktoroitu ja laajennettu. 
 - Jos käyttäjä syöttää taajuden virheellisessä muodossa, käyttöliittymässä näytetään virheviesti. 
+- Lisätty useita testejä ääniraudalle sekä tallennettujen asetusten lukemisesta ja kirjoittamisesta vastaavalle TfPresetRepository-luokalle.
