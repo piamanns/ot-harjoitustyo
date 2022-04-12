@@ -9,6 +9,7 @@ Sovelluksen toimivuus on testattu Python-versiolla 3.8.
 ## Dokumentaatio
 
 - [Vaatimusmäärittely](/musictools/dokumentaatio/vaatimusmaarittely.md) 
+- [Arkkitehtuurikuvaus](musictools/dokumentaatio/arkkitehtuuri.md)
 - [Työaikakirjanpito](/musictools/dokumentaatio/tyoaikakirjanpito.md)
 - [Changelog](/musictools/dokumentaatio/changelog.md)
 
