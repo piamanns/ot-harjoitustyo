@@ -18,6 +18,10 @@ classDiagram
         +freq
         +label
     }
+    class Metronome{
+    }
+    class MetrPreset{
+    }    
 ```
 ### Pakkaus- ja luokkkaavio:
 ![Sovelluksen pakkaus- ja luokkarakenne](./kuvat/musictools_pakkaus_luokat.png)
