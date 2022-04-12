@@ -16,9 +16,9 @@ Jos sovellusta on käytetty aikaisemmin, sovellus avautuu siihen tilaan, johon t
 
 ### Elektroninen äänirauta
 
-- Käyttäjä voi valita viritysäänen
-- Käyttäjä voi käynnistää ja pysäyttää viritysäänen
-- Käyttäjä voi nimetä, tallentaa ja ladata ääniraudan asetukset. Käyttäjä voi myös poistaa aiemmin tallennettuja ääniraudan asetuksia.
+- Käyttäjä voi valita viritysäänen **(tehty)**
+- Käyttäjä voi käynnistää ja pysäyttää viritysäänen **(tehty)**
+- Käyttäjä voi nimetä, tallentaa ja ladata ääniraudan asetukset. Käyttäjä voi myös poistaa aiemmin tallennettuja ääniraudan asetuksia. **(osittain tehty, tallennus, lataaminen ja poisto onnistuvat. Tallennettavan asetuksen nimeäminen on vielä työn alla.)**
 
 ### Metronomi
 
