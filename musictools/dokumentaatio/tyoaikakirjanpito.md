@@ -11,4 +11,7 @@
 | 10.4 | 6 | Toteutus ääniraudan tallennettujen asetuksien poistamiselle. Alustava käyttöliittymä ääniraudan asetusten hallinnoimiselle. 
 | 11.4 | 6 | Ääniraudan käyttöliittymän refaktorointia ja viilausta virtuaalityöasemalla. Syötetyn taajuuden validointi ja virheilmoituksen näyttäminen.|
 | 12.4 | 1 | Yksikkötestauksen laajentaminen koskemaan myös tallennettujen asetusten lukemista ja tallentamista. Lisätestejä ääniraudalle. |
-| yht | 40 | |
+| 14.4 | 1 | Metronomin eri toteutusvaihtojen tutkimista.|
+| 15.4 | 8 | Metronomin proof of concept (useamman epätarkasti tikittävän vaihtoehdon kokeilu ja hylkääminen, kunnes hyväksyttävä toteutustapa löytyi).|
+| 16.4 | 1 | Yksinkertainen käyttöliittymä Metronomi-POC:lle. Toimivuuden testaus virtuaalityöasemalla.|
+| yht | 50 | |
