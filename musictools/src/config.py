@@ -10,3 +10,5 @@ except FileNotFoundError:
 
 TF_PRESETS_FILENAME = os.getenv("TF_PRESETS_FILENAME") or "tf_presets.csv"
 TF_PRESETS_PATH = os.path.join(dirname, "..", "data", TF_PRESETS_FILENAME)
+METR_CLICK_FILENAME = os.getenv("METR_CLICK_FILENAME") or "click.wav"
+METR_CLICK_PATH = os.path.join(dirname, "sounds", METR_CLICK_FILENAME)

@@ -1,11 +1,13 @@
 from entities.tf_preset import TfPreset
 from entities.tuning_fork import TuningFork
+from entities.metronome import Metronome
 from repositories.tf_preset_repository import tf_preset_repository
 
 
 class MusictoolsService:
     def __init__(self):
         self._tfork = TuningFork()
+        self._metronome = Metronome()
 
     def tfork_is_active(self):
         return self._tfork.is_active()
@@ -28,5 +30,18 @@ class MusictoolsService:
 
     def tfork_delete_preset(self, preset_id: str):
         tf_preset_repository.delete(preset_id)
+
+    def metronome_is_active(self):
+        return self._metronome.is_active()
+
+    def metronome_start(self):
+        self._metronome.start()
+
+    def metronome_stop(self):
+        self._metronome.stop()
+
+    def metronome_get_bpm(self):
+        return self._metronome.get_bpm()
+
 
 mt_service = MusictoolsService()

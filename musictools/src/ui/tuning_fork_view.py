@@ -21,11 +21,11 @@ class TuningForkView:
         self._initialize()
 
     def pack(self):
-        self._frm_main.pack()
+        self._frm_main.pack(side=tk.LEFT)
 
     def _initialize(self):
         self._presets = mt_service.tfork_get_presets()
-        self._frm_main = ttk.Frame(master=self._root)
+        self._frm_main = tk.Frame(master=self._root)
 
         self._init_frm_header()
         self._init_lbl_error()

@@ -1,10 +1,13 @@
 from ui.tuning_fork_view import TuningForkView
+from ui.metronome_view import MetronomeView
 
 
 class UI:
     def __init__(self, root):
         self._root = root
         self._tuning_fork_view = TuningForkView(self._root)
+        self._metronome_view = MetronomeView(self._root)
 
     def start(self):
         self._tuning_fork_view.pack()
+        self._metronome_view.pack()
