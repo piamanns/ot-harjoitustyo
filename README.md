@@ -48,3 +48,14 @@ poetry run invoke coverage-report
 Generoitu raportti löytyy sovelluksen juurihakemistoon syntyvästä hakemistosta _htmlcov_.
 Tarkastele raporttia avamalla tiedosto _index.html_ selaimeen.
 
+### Pylint
+
+Suorita koodin laatutarkistus kommennolla:
+
+```bash
+poetry run invoke lint
+```
+
+Tehtävät tarkistukset on määritelty tiedostossa [.pylintrc](./musictools/.pylintrc)
+
+
