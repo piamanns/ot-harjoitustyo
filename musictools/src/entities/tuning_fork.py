@@ -19,7 +19,7 @@ class TuningFork:
 
     def start(self):
         self._stream = sd.OutputStream(
-            channels=1, callback=self._callback, samplerate=44100)
+            channels=1, callback=self._callback, samplerate=self._sample_rate)
         self._stream.start()
 
     def stop(self):
