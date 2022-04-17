@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import RIDGE, ttk
 from services.musictools_service import mt_service
 from config import METR_ICON_PATH
 
@@ -21,8 +21,7 @@ class MetronomeView:
         self._frm_main.pack(side=tk.LEFT, fill="y")
     
     def _initialize(self):
-        self._frm_main = tk.Frame(master=self._root, highlightbackground="black",
-                                   highlightthickness = 1)
+        self._frm_main = ttk.Frame(master=self._root, borderwidth=1, relief=tk.RIDGE)
         self._init_frm_header()
         self._init_frm_bpm_entry()
         self._init_frm_start_button()

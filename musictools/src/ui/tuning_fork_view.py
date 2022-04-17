@@ -27,8 +27,7 @@ class TuningForkView:
    
     def _initialize(self):
         self._presets = mt_service.tfork_get_presets()
-        self._frm_main = tk.Frame(master=self._root, highlightbackground="black",
-                                  highlightthickness = 1)
+        self._frm_main = ttk.Frame(master=self._root, borderwidth=1, relief=tk.RIDGE)
 
         self._init_frm_header()
         self._init_lbl_error()
