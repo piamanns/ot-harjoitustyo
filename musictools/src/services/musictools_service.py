@@ -43,5 +43,7 @@ class MusictoolsService:
     def metronome_get_bpm(self):
         return self._metronome.get_bpm()
 
+    def metronome_set_bpm(self, bpm: int):
+        self._metronome.set_bpm(bpm)
 
 mt_service = MusictoolsService()

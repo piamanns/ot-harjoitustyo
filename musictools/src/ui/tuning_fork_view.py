@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import LEFT, NS, VERTICAL, ttk
 from services.musictools_service import mt_service
+from config import TF_ICON_PATH
 
 
 class TuningForkView:
@@ -10,6 +11,7 @@ class TuningForkView:
         self._frm_presets = None
         self._frm_preset_buttons = None
         self._frm_settings = None
+        self._img_tf = None
         self._lbl_error = None
         self._var_freq_txt = None
         self._var_entry_txt = None
@@ -21,11 +23,12 @@ class TuningForkView:
         self._initialize()
 
     def pack(self):
-        self._frm_main.pack(side=tk.LEFT)
-
+        self._frm_main.pack(side=tk.LEFT, fill="y")
+   
     def _initialize(self):
         self._presets = mt_service.tfork_get_presets()
-        self._frm_main = tk.Frame(master=self._root)
+        self._frm_main = tk.Frame(master=self._root, highlightbackground="black",
+                                  highlightthickness = 1)
 
         self._init_frm_header()
         self._init_lbl_error()
@@ -56,6 +59,11 @@ class TuningForkView:
         frm_header = tk.Frame(master=self._frm_main)
         frm_header.configure(bg="yellow")
 
+        cnv_tf = tk.Canvas(master=frm_header, width=96, height=96, bg="yellow", 
+                              highlightthickness=0)        
+        self._img_tf = tk.PhotoImage(file=TF_ICON_PATH)
+        cnv_tf.create_image(48, 48, image=self._img_tf)
+   
         self._var_freq_txt = tk.StringVar()
         self._var_freq_txt.set("Tuning Fork\n(440 Hz)")
 
@@ -64,9 +72,9 @@ class TuningForkView:
             textvariable=self._var_freq_txt,
             fg="black",
             bg="yellow",
-            height=20
+            height=6
         )
-
+        cnv_tf.pack(pady=(30,0))
         lbl_tuningfork.pack()        
         frm_header.grid(pady=(0,3), sticky=(tk.W, tk.E))
 
@@ -252,7 +260,7 @@ class TuningForkView:
                return freq
         except ValueError:
             pass
-        self._show_error("Allowed frequencies: 20-8000 Hz")
+        self._show_error("Enter a frequency between 20 and 8000 Hz")
         return None
     
     def _handle_settings_open_btn_click(self):
@@ -281,4 +289,4 @@ class TuningForkView:
             self._show_settings()
     
     def _show_settings(self):
-        self._frm_settings.grid(sticky=(tk.W, tk.E))  
+        self._frm_settings.grid(sticky=(tk.W, tk.E))
