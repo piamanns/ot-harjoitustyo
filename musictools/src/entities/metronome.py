@@ -58,18 +58,22 @@ class Metronome:
         self._stream.start()
 
     def _init_click_vars(self):
+        self.set_bpm(self._bpm)
         self._start_idx = 0
         self._prev_idx = 0
         self._click_idx = 0
         # Play first click immediately:
         self._play_click = True
-        self._wait = 60/self._bpm * self._sample_rate
 
     def stop(self):
         self._stream.stop()
 
     def set_bpm(self, bpm: int):
-        self._bpm = bpm
+        try:
+            self._bpm = int(bpm)
+            self._wait = 60/self._bpm * self._sample_rate
+        except ValueError:
+            pass
 
     def get_bpm(self):
         return self._bpm
