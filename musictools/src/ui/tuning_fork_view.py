@@ -242,20 +242,19 @@ class TuningForkView:
             if self._lbl_error.winfo_ismapped:
                 self._hide_error()
         else: 
-            self._show_freq_validation_error()
+            self._show_validation_error()
       
     def _handle_save_btn_click(self):
-        freq = mt_service.tfork_validate_freq(self._ent_freq.get())
-        if freq:
-            mt_service.tfork_save_preset(freq, "?")
+        preset = mt_service.tfork_save_preset(self._ent_freq.get(), "?")
+        if preset:
             self._presets = mt_service.tfork_get_presets()
             self._update_preset_views()
             if self._lbl_error.winfo_ismapped:
                 self._hide_error()
         else: 
-            self._show_freq_validation_error()
+            self._show_validation_error()
 
-    def _show_freq_validation_error(self):
+    def _show_validation_error(self):
         self._show_error("Enter a frequency between 20 and 8000 Hz")
     
     def _handle_settings_open_btn_click(self):
