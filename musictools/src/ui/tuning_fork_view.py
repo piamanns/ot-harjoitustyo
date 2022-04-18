@@ -223,11 +223,10 @@ class TuningForkView:
 
         frm_settings_buttons.grid(pady=(0,6), sticky=tk.W)
 
-    def _update_tuning_fork(self, freq: float):
+    def _update_tf_header(self, freq: float):
         label_text = f"Tuning Fork\n({freq} Hz)"
         self._var_freq_txt.set(label_text)
-        mt_service.tfork_set_freq(freq)
-
+   
     def _handle_play_btn_click(self):
         if mt_service.tfork_is_active():
             mt_service.tfork_stop()
@@ -237,30 +236,28 @@ class TuningForkView:
             self._var_play_txt.set("Stop")
 
     def _handle_set_btn_click(self):
-        freq = self._validate_frequency(self._ent_freq.get())
+        freq = mt_service.tfork_validate_freq(self._ent_freq.get())
         if freq:  
-            self._update_tuning_fork(freq)
+            mt_service.tfork_set_freq(freq)
+            self._update_tf_header(freq)
             if self._lbl_error.winfo_ismapped:
                 self._hide_error()
+        else: 
+            self._show_freq_validation_error()
       
     def _handle_save_btn_click(self):
-        freq = self._validate_frequency(self._ent_freq.get())
+        freq = mt_service.tfork_validate_freq(self._ent_freq.get())
         if freq:
             mt_service.tfork_save_preset(freq, "?")
             self._presets = mt_service.tfork_get_presets()
             self._update_preset_views()
             if self._lbl_error.winfo_ismapped:
                 self._hide_error()
-      
-    def _validate_frequency(self, freq: float):
-        try:
-            freq = float(freq)
-            if freq >= 20 and freq <= 8000:
-               return freq
-        except ValueError:
-            pass
+        else: 
+            self._show_freq_validation_error()
+
+    def _show_freq_validation_error(self):
         self._show_error("Enter a frequency between 20 and 8000 Hz")
-        return None
     
     def _handle_settings_open_btn_click(self):
         if not self._frm_settings.winfo_ismapped():
@@ -270,7 +267,7 @@ class TuningForkView:
         self._frm_settings.grid_remove()
 
     def _handle_preset_btn_click(self, freq: float):
-        self._update_tuning_fork(freq)
+        self._update_tf_header(freq)
         self._var_entry_txt.set(str(freq))
     
     def _handle_preset_delete_btn_click(self, preset_id: str):

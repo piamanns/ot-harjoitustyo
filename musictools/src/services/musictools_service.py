@@ -21,6 +21,9 @@ class MusictoolsService:
     def tfork_set_freq(self, freq: float):
         self._tfork.set_frequency(freq)
 
+    def tfork_validate_freq(self, freq: float):
+        return self._tfork.validate_frequency(freq)
+
     def tfork_get_presets(self):
         return tf_preset_repository.get_all()
 
