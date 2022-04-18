@@ -34,7 +34,7 @@ class MusictoolsService:
             tf_preset_repository.save(preset)
             return preset
         return None
-   
+
     def tfork_delete_preset(self, preset_id: str):
         tf_preset_repository.delete(preset_id)
 
