@@ -10,8 +10,10 @@ class MetronomeView:
         self._root = root
         self._frm_main = None
         self._img_metr = None
+        self._lbl_error = None
         self._var_start_txt = None
         self._var_bpm_txt = None
+        self._var_error_txt = None
         self._var_bpm_entry_txt = None
         self._ent_bpm = None
 
@@ -23,8 +25,11 @@ class MetronomeView:
     def _initialize(self):
         self._frm_main = ttk.Frame(master=self._root, borderwidth=1, relief=tk.RIDGE)
         self._init_frm_header()
+        self._init_lbl_error()
         self._init_frm_bpm_entry()
         self._init_frm_start_button()
+
+        self._hide_error()
     
     def _init_frm_header(self):
         frm_header = tk.Frame(master=self._frm_main)
@@ -50,6 +55,22 @@ class MetronomeView:
         cnv_metr.pack(pady=(30,0))
         lbl_metronome.pack()
         frm_header.grid(pady=(0,3), sticky=(tk.W, tk.E))
+
+    def _init_lbl_error(self):
+        self._var_error_txt = tk.StringVar()
+        self._lbl_error = ttk.Label(
+            master=self._frm_main,
+            textvariable=self._var_error_txt,
+            foreground="red"
+        )
+        self._lbl_error.grid()
+    
+    def _show_error(self, message):
+        self._var_error_txt.set(message)
+        self._lbl_error.grid()
+
+    def _hide_error(self):
+        self._lbl_error.grid_remove()
     
     def _init_frm_bpm_entry(self):
         frm_bpm_entry = ttk.Frame(master=self._frm_main)
@@ -99,14 +120,14 @@ class MetronomeView:
             self._var_start_txt.set("Stop")
     
     def _handle_set_btn_click(self):
-        bpm = int(self._ent_bpm.get())
-        self._update_metronome(bpm)
+        bpm = mt_service.metronome_set_bpm(self._ent_bpm.get())
+        if bpm:
+            self._update_frm_header(bpm)
+            if self._lbl_error.winfo_ismapped:
+                self._hide_error()
+        else:
+            self._show_error("Enter a bpm value between 1 and 500")
     
-    def _update_metronome(self, bpm: int):
+    def _update_frm_header(self, bpm: int):
         label_text = f"Metronome\n({bpm} bpm)"
         self._var_bpm_txt.set(label_text)
-        mt_service.metronome_set_bpm(bpm)
-    
-    
-
-

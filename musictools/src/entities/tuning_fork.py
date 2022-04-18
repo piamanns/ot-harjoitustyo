@@ -42,7 +42,7 @@ class TuningFork:
         new_freq = self.validate_frequency(freq)
         if new_freq:
             self._frequency = new_freq
-            return new_freq
+            return self._frequency
         else:
             return None
 
