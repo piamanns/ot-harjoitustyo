@@ -236,9 +236,8 @@ class TuningForkView:
             self._var_play_txt.set("Stop")
 
     def _handle_set_btn_click(self):
-        freq = mt_service.tfork_validate_freq(self._ent_freq.get())
+        freq = mt_service.tfork_set_freq(self._ent_freq.get())
         if freq:  
-            mt_service.tfork_set_freq(freq)
             self._update_tf_header(freq)
             if self._lbl_error.winfo_ismapped:
                 self._hide_error()

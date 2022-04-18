@@ -19,7 +19,7 @@ class MusictoolsService:
         self._tfork.stop()
 
     def tfork_set_freq(self, freq: float):
-        self._tfork.set_frequency(freq)
+        return self._tfork.set_frequency(freq)
 
     def tfork_validate_freq(self, freq: float):
         return self._tfork.validate_frequency(freq)
