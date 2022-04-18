@@ -52,7 +52,8 @@ class TuningForkView:
         self._lbl_error.grid()
 
     def _hide_error(self):
-        self._lbl_error.grid_remove()
+        if self._lbl_error.winfo_ismapped:
+            self._lbl_error.grid_remove()
 
     def _init_frm_header(self):
         frm_header = tk.Frame(master=self._frm_main)
@@ -239,8 +240,7 @@ class TuningForkView:
         freq = mt_service.tfork_set_freq(self._ent_freq.get())
         if freq:  
             self._update_tf_header(freq)
-            if self._lbl_error.winfo_ismapped:
-                self._hide_error()
+            self._hide_error()
         else: 
             self._show_validation_error()
       
@@ -249,8 +249,7 @@ class TuningForkView:
         if preset:
             self._presets = mt_service.tfork_get_presets()
             self._update_preset_views()
-            if self._lbl_error.winfo_ismapped:
-                self._hide_error()
+            self._hide_error()
         else: 
             self._show_validation_error()
 
@@ -265,8 +264,11 @@ class TuningForkView:
         self._frm_settings.grid_remove()
 
     def _handle_preset_btn_click(self, freq: float):
-        self._update_tf_header(freq)
-        self._var_entry_txt.set(str(freq))
+        freq = mt_service.tfork_set_freq(freq)
+        if freq:
+            self._update_tf_header(freq)
+            self._var_entry_txt.set(str(freq))
+            self._hide_error()
     
     def _handle_preset_delete_btn_click(self, preset_id: str):
         mt_service.tfork_delete_preset(preset_id)

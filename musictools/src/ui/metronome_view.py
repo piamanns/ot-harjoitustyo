@@ -70,7 +70,8 @@ class MetronomeView:
         self._lbl_error.grid()
 
     def _hide_error(self):
-        self._lbl_error.grid_remove()
+        if self._lbl_error.winfo_ismapped:
+            self._lbl_error.grid_remove()
     
     def _init_frm_bpm_entry(self):
         frm_bpm_entry = ttk.Frame(master=self._frm_main)
@@ -123,8 +124,7 @@ class MetronomeView:
         bpm = mt_service.metronome_set_bpm(self._ent_bpm.get())
         if bpm:
             self._update_frm_header(bpm)
-            if self._lbl_error.winfo_ismapped:
-                self._hide_error()
+            self._hide_error()
         else:
             self._show_error("Enter a bpm value between 1 and 500")
     
