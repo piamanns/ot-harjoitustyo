@@ -14,4 +14,5 @@
 | 14.4 | 1 | Metronomin eri toteutusvaihtojen tutkimista.|
 | 15.4 | 8 | Metronomin proof of concept (useamman epätarkasti tikittävän vaihtoehdon kokeilu ja hylkääminen, kunnes hyväksyttävä toteutustapa löytyi).|
 | 16.4 | 1 | Yksinkertainen käyttöliittymä Metronomi-POC:lle. Toimivuuden testaus virtuaalityöasemalla.|
-| yht | 50 | |
+| 17.4 | 4 | Toteutus metronomin bpm-arvon asettamiselle. Graafisen käyttöliittymän viilausta. Yksikkötestejä metronomille.|
+| yht | 54 | |
