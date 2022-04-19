@@ -39,7 +39,7 @@ class MusictoolsService:
         return None
 
     def tfork_delete_preset(self, preset_id: str):
-         self._tf_preset_repository.delete(preset_id)
+        self._tf_preset_repository.delete(preset_id)
 
     def metronome_is_active(self):
         return self._metronome.is_active()
