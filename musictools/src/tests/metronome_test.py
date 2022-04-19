@@ -10,9 +10,19 @@ class TestTuningFork(unittest.TestCase):
         self.metronome.set_bpm(120)
         self.assertEqual(self.metronome.get_bpm(), 120)
     
-    def test_metronome_loads_click_sound_when_initialized(self):
-        self.assertGreater(len(self.metronome._click_data), 0)
+    def test_metronome_loads_some_click_sound_data_when_initialized(self):
+        self.assertGreater(len(self.metronome._click_data), 1000)
     
+    def test_setting_metronome_bpm_to_non_int_does_nothing(self):
+        self.metronome.set_bpm(100)
+        self.metronome.set_bpm("abc")
+        self.assertEqual(self.metronome.get_bpm(), 100)
+    
+    def test_setting_metronome_bpm_to_less_than_1_does_nothing(self):
+        self.metronome.set_bpm(100)
+        self.metronome.set_bpm(0)
+        self.assertEqual(self.metronome.get_bpm(), 100)
+
     def test_metronome_is_active_returns_correct_value_when_metr_not_started(self):
         is_active = self.metronome.is_active()
         self.assertEqual(is_active, False)

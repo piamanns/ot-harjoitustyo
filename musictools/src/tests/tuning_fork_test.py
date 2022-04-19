@@ -14,6 +14,11 @@ class TestTuningFork(unittest.TestCase):
         self.tuning_fork.set_frequency(440)
         self.tuning_fork.set_frequency("abc")
         self.assertEqual(self.tuning_fork.get_frequency(), 440)
+    
+    def test_setting_tuning_fork_to_negative_freq_does_nothing(self):
+        self.tuning_fork.set_frequency(440)
+        self.tuning_fork.set_frequency(-440)
+        self.assertEqual(self.tuning_fork.get_frequency(), 440)
 
     def test_tuning_fork_is_active_returns_correct_value_when_tf_not_started(self):
         is_active = self.tuning_fork.is_active()
