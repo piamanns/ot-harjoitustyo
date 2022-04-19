@@ -15,3 +15,10 @@
 - Graafista käyttöliittymää refaktoroitu ja laajennettu. 
 - Jos käyttäjä syöttää taajuden virheellisessä muodossa, käyttöliittymässä näytetään virheviesti. 
 - Lisätty useita testejä ääniraudalle sekä tallennettujen asetusten lukemisesta ja kirjoittamisesta vastaavalle TfPresetRepository-luokalle.
+
+## Viikko 5
+- Sovellukseen lisätty metronomi.
+- Käyttäjä voi asettaa metronomille bpm-arvon. Jos syöte on virheellinen, käyttöliittymässä näytetään virheviesti.
+- Sekä ääniraudan että metronomin syötteiden validointi siirretty pois käyttöliittymäluokista, äänirauta- ja metronomiluokkiin.
+- Ääniraudalle ja metronomille omat ikonit
+- Lisätty yksikkötestejä metronomille.
