@@ -2,6 +2,8 @@
 
 Sovellus sisältää kaksi muusiikin harrastajalle hyödyllistä työkalua: viritysäänen tuottavan digitaalisen **ääniraudan** ja **metronomin**.
 
+[Viikon 5 GitHub Release](https://github.com/piamanns/ot-harjoitustyo/releases)
+
 ## Python-versio
 
 Sovelluksen toimivuus on testattu Python-versiolla 3.8.
