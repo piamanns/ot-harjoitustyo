@@ -22,9 +22,9 @@ Jos sovellusta on käytetty aikaisemmin, sovellus avautuu siihen tilaan, johon t
 
 ### Metronomi
 
-- Käyttäjä voi asettaa tempon (bpm)
+- Käyttäjä voi asettaa tempon (bpm) **(tehty)**
 - Käyttäjä voi valita tahtilajin. Metronomi painottaa tahtien ykkösiskuja tahtilajin mukaisesti.
-- Käyttäjä voi käynnistää ja pysäyttää metronomin
+- Käyttäjä voi käynnistää ja pysäyttää metronomin **(tehty)**
 - Käyttäjä voi nimetä, tallentaa ja ladata metronomin asetukset. Käyttäjä voi myös poistaa aiemmin tallennettuja metronomin asetuksia.
 
 ## Jatkokehitysideoita
