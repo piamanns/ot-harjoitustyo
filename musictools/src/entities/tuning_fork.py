@@ -1,5 +1,6 @@
 import sounddevice as sd
 import numpy as np
+from config import TF_FREQ_MAX, TF_FREQ_MIN
 
 
 class TuningFork:
@@ -32,7 +33,7 @@ class TuningFork:
     def validate_frequency(self, freq: float):
         try:
             freq = float(freq)
-            if 20 <= freq <= 8000:
+            if int(TF_FREQ_MIN) <= freq <= int(TF_FREQ_MAX):
                 return freq
         except ValueError:
             pass
