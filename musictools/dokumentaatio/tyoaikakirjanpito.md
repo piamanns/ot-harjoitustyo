@@ -16,4 +16,6 @@
 | 16.4 | 1 | Yksinkertainen käyttöliittymä Metronomi-POC:lle. Toimivuuden testaus virtuaalityöasemalla.|
 | 17.4 | 4 | Toteutus metronomin bpm-arvon asettamiselle. Graafisen käyttöliittymän viilausta. Yksikkötestejä metronomille.|
 | 18.4 | 4 | Ääniraudalle ja metronomille syötettyjen arvojen validoinnin siirtäminen ääniraudan ja metronomin omille luokille. Virheilmoitus myös metronomille. Refaktoroinnin aiheuttamien bugien korjausta.|
-| yht | 58 | |
+| 19.4 | 2 | Ensimmäinen GitHub Release. Yksikkötestien kirjoittamista.
+| 20.4 | 2 | Maksimi- ja minimiarvot ääniraudan ja metronomin asetuksille ympäristömuuttujiksi. Metronomille mahdollisuus asettaa iskujen määrä tahdissa, jolloin metronomi painottaa tahdin ensimmäistä iskua erilaisella klikki-äänellä.
+| yht | 62 | |
