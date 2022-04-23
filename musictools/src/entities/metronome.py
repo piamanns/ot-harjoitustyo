@@ -52,7 +52,7 @@ class Metronome:
                 self.increase_beat_count()
             # Check if it's time for next click
             # even if previous hasn't finished playing yet (fast tempo)
-            if self._start_idx - self._prev_idx >= self._wait:
+            elif self._start_idx - self._prev_idx >= self._wait:
                 self._play_click = False
                 self.increase_beat_count()
         else:

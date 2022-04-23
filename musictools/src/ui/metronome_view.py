@@ -1,14 +1,16 @@
 import tkinter as tk
-from tkinter import RIDGE, ttk
+from tkinter import ttk
+from ui.tool_view_base import ToolView
+from ui.presets_view import PresetsView
 from services.musictools_service import mt_service
 from config import METR_BEATS_MAX, METR_BEATS_MIN, METR_ICON_PATH
 
-import os
 
-class MetronomeView:
+class MetronomeView(ToolView):
     def __init__(self, root):
-        self._root = root
-        self._frm_main = None
+        super().__init__(root)
+        self._frm_presets = None
+        self._presets_view = None
         self._img_metr = None
         self._lbl_error = None
         self._var_start_txt = None
@@ -20,16 +22,14 @@ class MetronomeView:
 
         self._initialize()
     
-    def pack(self):
-        self._frm_main.pack(side=tk.LEFT, fill="y")
-    
     def _initialize(self):
-        self._frm_main = ttk.Frame(master=self._root, borderwidth=1, relief=tk.RIDGE)
+        super()._initialize()
         self._init_frm_header()
         self._init_lbl_error()
         self._init_frm_bpm_entry()
         self._init_frm_beats_option()
         self._init_frm_start_button()
+        self._init_frm_presets()
 
         self._hide_error()
     
@@ -67,23 +67,6 @@ class MetronomeView:
         lbl_metr_bpm.pack(pady=(22,0))
         lbl_metr_beats.pack(pady=(0,20))
         frm_header.grid(pady=(0,3), sticky=(tk.W, tk.E))
-
-    def _init_lbl_error(self):
-        self._var_error_txt = tk.StringVar()
-        self._lbl_error = ttk.Label(
-            master=self._frm_main,
-            textvariable=self._var_error_txt,
-            foreground="red"
-        )
-        self._lbl_error.grid()
-    
-    def _show_error(self, message):
-        self._var_error_txt.set(message)
-        self._lbl_error.grid()
-
-    def _hide_error(self):
-        if self._lbl_error.winfo_ismapped:
-            self._lbl_error.grid_remove()
     
     def _init_frm_bpm_entry(self):
         frm_bpm_entry = ttk.Frame(master=self._frm_main)
@@ -147,6 +130,19 @@ class MetronomeView:
         btn_start.pack()
         frm_start_button.grid(pady=(5,5))
 
+    def _init_frm_presets(self):
+        presets =[]
+        self._frm_presets = ttk.Frame(master=self._frm_main)
+        self._presets_view = PresetsView(
+            self._frm_presets,
+            presets,
+            self._handle_preset_btn_click,
+            self._handle_preset_delete_btn_click
+        )
+        self._presets_view.pack()
+        self._frm_presets.grid(sticky=(tk.W, tk.E))
+
+
     def _handle_start_btn_click(self):
         if mt_service.metronome_is_active():
             mt_service.metronome_stop()
@@ -173,3 +169,9 @@ class MetronomeView:
 
     def _update_frm_header_beats(self, beats: int):
         self._var_beats_txt.set(f"Beats per bar: {beats}")
+
+    def _handle_preset_btn_click(self):
+        pass
+   
+    def _handle_preset_delete_btn_click(self):
+        pass

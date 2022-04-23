@@ -1,60 +1,34 @@
 import tkinter as tk
-from tkinter import LEFT, NS, VERTICAL, ttk
+from tkinter import ttk
+from ui.tool_view_base import ToolView
+from ui.presets_view import PresetsView
 from services.musictools_service import mt_service
 from config import TF_ICON_PATH
 
 
-class TuningForkView:
+class TuningForkView(ToolView):
     def __init__(self, root):
-        self._root = root
-        self._frm_main = None
+        super().__init__(root)
         self._frm_presets = None
-        self._frm_preset_buttons = None
-        self._frm_settings = None
+        self._presets_view = None
         self._img_tf = None
-        self._lbl_error = None
         self._var_freq_txt = None
         self._var_entry_txt = None
         self._var_play_txt = None
         self._var_error_txt = None
         self._ent_freq = None
-        self._presets = []
 
         self._initialize()
-
-    def pack(self):
-        self._frm_main.pack(side=tk.LEFT, fill="y")
-   
+    
     def _initialize(self):
-        self._presets = mt_service.tfork_get_presets()
-        self._frm_main = ttk.Frame(master=self._root, borderwidth=1, relief=tk.RIDGE)
-
+        super()._initialize()
         self._init_frm_header()
         self._init_lbl_error()
         self._init_frm_freq_entry()
         self._init_frm_play_button()
         self._init_frm_presets()
-        self._init_frm_presets_settings()
-
         self._hide_error()
-
-    def _init_lbl_error(self):
-        self._var_error_txt = tk.StringVar()
-        self._lbl_error = ttk.Label(
-            master=self._frm_main,
-            textvariable=self._var_error_txt,
-            foreground="red"
-        )
-        self._lbl_error.grid()
     
-    def _show_error(self, message):
-        self._var_error_txt.set(message)
-        self._lbl_error.grid()
-
-    def _hide_error(self):
-        if self._lbl_error.winfo_ismapped:
-            self._lbl_error.grid_remove()
-
     def _init_frm_header(self):
         frm_header = tk.Frame(master=self._frm_main)
         frm_header.configure(bg="yellow")
@@ -127,102 +101,16 @@ class TuningForkView:
         frm_play_button.grid(pady=(0,5))
 
     def _init_frm_presets(self):
+        presets = mt_service.tfork_get_presets()
         self._frm_presets = ttk.Frame(master=self._frm_main)
-        self._frm_presets.configure(padding=5)    
-
-        frm_presets_header = ttk.Frame(master=self._frm_presets)
-
-        lbl_presets = ttk.Label(
-            master=frm_presets_header,
-            text="Presets:"
+        self._presets_view = PresetsView(
+            self._frm_presets,
+            presets,
+            self._handle_preset_btn_click,
+            self._handle_preset_delete_btn_click
         )
-
-        btn_settings_open = tk.Button(
-            master=frm_presets_header,
-            text="Manage",
-            pady=5,
-            command=self._handle_settings_open_btn_click
-        )
-
-        lbl_presets.pack(side=LEFT)
-        btn_settings_open.pack(side=LEFT, padx=5)
-        frm_presets_header.grid(pady=(0,3), sticky=tk.W)
-
-        self._init_preset_buttons()
+        self._presets_view.pack()
         self._frm_presets.grid(sticky=(tk.W, tk.E))
-
-    def _init_preset_buttons(self):
-        self._frm_preset_buttons = ttk.Frame(master=self._frm_presets)
-
-        if len(self._presets) > 0:
-            pos = 0
-            cols = 3
-
-            for preset in self._presets:
-                btn = tk.Button(
-                    master=self._frm_preset_buttons,
-                    text=f"{preset.freq} Hz",
-                    pady=5,
-                    command=lambda freq=preset.freq: self._handle_preset_btn_click(
-                        freq)
-                )
-                btn.grid(column=pos % cols, row=pos//cols, padx=(3,0))
-                pos += 1
-        else:
-            lbl_no_presets = tk.Label(
-                master=self._frm_preset_buttons,
-                text="(No presets)"
-            )
-            lbl_no_presets.grid(sticky=tk.W)
-
-        self._frm_preset_buttons.grid(sticky=(tk.W, tk.E))
-
-    def _init_frm_presets_settings(self):
-        self._frm_settings = ttk.Frame(master=self._frm_main)
-        self._frm_settings.configure(padding=5)
-        frm_settings_header = ttk.Frame(master=self._frm_settings)
-
-        lbl_presets_settings = ttk.Label(
-            master=frm_settings_header,
-            text="Manage presets:"
-        )
-
-        btn_settings_close = tk.Button(
-            master=frm_settings_header,
-            text="Close",
-            pady=5,
-            command=self._handle_settings_close_btn_click
-        )
-
-        lbl_presets_settings.pack(side=LEFT)
-        btn_settings_close.pack(side=LEFT, padx=5)
-        frm_settings_header.grid(pady=(0,3), sticky=tk.W)
-
-        frm_settings_buttons = ttk.Frame(master=self._frm_settings)   
-        if len(self._presets) > 0:
-            row = 1
-            for preset in self._presets:
-                lbl = ttk.Label(
-                    master=frm_settings_buttons,
-                    text=f"({preset.freq} Hz)",
-
-                )
-                btn = tk.Button(
-                    master=frm_settings_buttons,
-                    text="Delete",
-                    command=lambda id=preset.id: self._handle_preset_delete_btn_click(id)
-                )
-                lbl.grid(row=row, column=0)
-                btn.grid(row=row, column=1, padx=(3,0))
-                row += 1
-        else:
-            lbl_no_presets = tk.Label(
-                master=frm_settings_buttons,
-                text="(No presets)"
-            )
-            lbl_no_presets.grid(sticky=tk.W)
-
-        frm_settings_buttons.grid(pady=(0,6), sticky=tk.W)
 
     def _update_tf_header(self, freq: float):
         label_text = f"Tuning Fork\n({freq} Hz)"
@@ -247,8 +135,8 @@ class TuningForkView:
     def _handle_save_btn_click(self):
         preset = mt_service.tfork_save_preset(self._ent_freq.get(), "?")
         if preset:
-            self._presets = mt_service.tfork_get_presets()
-            self._update_preset_views()
+            presets = mt_service.tfork_get_presets()
+            self._presets_view.update_view(presets)
             self._hide_error()
         else: 
             self._show_validation_error()
@@ -256,13 +144,6 @@ class TuningForkView:
     def _show_validation_error(self):
         self._show_error("Enter a frequency between 20 and 8000 Hz")
     
-    def _handle_settings_open_btn_click(self):
-        if not self._frm_settings.winfo_ismapped():
-            self._show_settings()
-
-    def _handle_settings_close_btn_click(self):
-        self._frm_settings.grid_remove()
-
     def _handle_preset_btn_click(self, freq: float):
         freq = mt_service.tfork_set_freq(freq)
         if freq:
@@ -272,17 +153,6 @@ class TuningForkView:
     
     def _handle_preset_delete_btn_click(self, preset_id: str):
         mt_service.tfork_delete_preset(preset_id)
-        self._presets = mt_service.tfork_get_presets()
-        self._update_preset_views()
+        presets = mt_service.tfork_get_presets()
+        self._presets_view.update_view(presets)
     
-    def _update_preset_views(self):
-        self._frm_preset_buttons.destroy()
-        self._init_preset_buttons()
-        settings_view_open = self._frm_settings.winfo_ismapped()
-        self._frm_settings.destroy()
-        self._init_frm_presets_settings()
-        if settings_view_open:
-            self._show_settings()
-    
-    def _show_settings(self):
-        self._frm_settings.grid(sticky=(tk.W, tk.E))
