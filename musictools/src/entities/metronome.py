@@ -4,7 +4,7 @@ from config import METR_CLICK_PATH, METR_CLICK_UP_PATH, METR_BPM_MAX, METR_BPM_M
 
 
 class Metronome:
-    def __init__(self, bpm=60, time_signature=(4, 4)):
+    def __init__(self, bpm=85, time_signature=(4, 4)):
         self._bpm = bpm
         self._wait = 0
         self._beats_per_bar = time_signature[0]
@@ -18,7 +18,6 @@ class Metronome:
         self._click_data = None
         self._click_up_data = None
         self._play_click = False
-
 
         self._load_clicksounds()
 
@@ -85,15 +84,21 @@ class Metronome:
     def stop(self):
         self._stream.stop()
 
-    def set_bpm(self, bpm: int):
+    def validate_bpm(self, bpm: int):
         try:
-            new_bpm = int(bpm)
-            if int(METR_BPM_MIN) <= new_bpm <= int(METR_BPM_MAX):
-                self._bpm = new_bpm
-                self._init_click_vars()
-                return self._bpm
+            bpm = int(bpm)
+            if int(METR_BPM_MIN) <= bpm <= int(METR_BPM_MAX):
+                return bpm
         except ValueError:
             pass
+        return None
+
+    def set_bpm(self, bpm: int):
+        new_bpm = self.validate_bpm(bpm)
+        if new_bpm:
+            self._bpm = new_bpm
+            self._init_click_vars()
+            return self._bpm
         return None
 
     def get_bpm(self):

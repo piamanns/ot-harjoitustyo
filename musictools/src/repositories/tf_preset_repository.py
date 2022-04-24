@@ -16,6 +16,7 @@ class TfPresetRepository:
         presets = self.__read_presets()
         presets.append(tf_preset)
         self.__write_presets(presets)
+        return tf_preset
 
     def delete(self, preset_id):
         presets = self.__read_presets()

@@ -50,10 +50,10 @@ class PresetsView:
             for preset in self._presets:
                 btn = tk.Button(
                     master=self._frm_preset_buttons,
-                    text=f"{preset} Hz",
+                    text=str(preset),
                     pady=5,
-                    command=lambda freq=preset.get_value(): self._handle_preset_btn_click(
-                        freq)
+                    command=lambda value=preset.get_value(): self._handle_preset_btn_click(
+                        value)
                 )
                 btn.grid(column=pos % cols, row=pos//cols, padx=(3,0))
                 pos += 1
@@ -92,7 +92,7 @@ class PresetsView:
             for preset in self._presets:
                 lbl = ttk.Label(
                     master=frm_settings_buttons,
-                    text=f"({preset} Hz)",
+                    text=str(preset),
 
                 )
                 btn = tk.Button(

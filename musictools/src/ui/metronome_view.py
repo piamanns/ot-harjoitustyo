@@ -3,7 +3,7 @@ from tkinter import ttk
 from ui.tool_view_base import ToolView
 from ui.presets_view import PresetsView
 from services.musictools_service import mt_service
-from config import METR_BEATS_MAX, METR_BEATS_MIN, METR_ICON_PATH
+from config import METR_BPM_MIN, METR_BPM_MAX, METR_BEATS_MAX, METR_BEATS_MIN, METR_ICON_PATH
 
 
 class MetronomeView(ToolView):
@@ -42,11 +42,11 @@ class MetronomeView(ToolView):
         self._img_metr = tk.PhotoImage(file=METR_ICON_PATH)
         cnv_metr.create_image(48, 48, image=self._img_metr)
 
-        bpm = mt_service.metronome_get_bpm()
+        bpm = mt_service.metr_get_bpm()
         self._var_bpm_txt = tk.StringVar()
         self._var_bpm_txt.set(f"Metronome\n({bpm} bpm)")
         
-        beats_per_bar = mt_service.metronome_get_beats_per_bar()
+        beats_per_bar = mt_service.metr_get_beats_per_bar()
         self._var_beats_txt = tk.StringVar()
         self._var_beats_txt.set(f"Beats per bar: {beats_per_bar}")
 
@@ -87,8 +87,16 @@ class MetronomeView(ToolView):
             command=self._handle_set_bpm_btn_click
         )
 
+        btn_save = tk.Button(
+            master=frm_bpm_entry,
+            text="Save",
+            pady=5,
+            command=self._handle_save_bpm_btn_click
+        )
+
         self._ent_bpm.grid(row=0, column=0, ipady=5)       
         btn_set.grid(row=0, column=1, padx=5)
+        btn_save.grid(row=0, column=2)
         frm_bpm_entry.grid(pady=(0,3))
     
     def _init_frm_beats_option(self):
@@ -100,7 +108,7 @@ class MetronomeView(ToolView):
 
         beats = list(range(int(METR_BEATS_MIN), int(METR_BEATS_MAX)+1))
         var_beats_option_int = tk.IntVar()
-        start_index = mt_service.metronome_get_beats_per_bar()
+        start_index = mt_service.metr_get_beats_per_bar()
         var_beats_option_int.set(beats[start_index-1])
         
         dropdown = tk.OptionMenu(
@@ -131,7 +139,7 @@ class MetronomeView(ToolView):
         frm_start_button.grid(pady=(5,5))
 
     def _init_frm_presets(self):
-        presets =[]
+        presets = mt_service.metr_get_presets()
         self._frm_presets = ttk.Frame(master=self._frm_main)
         self._presets_view = PresetsView(
             self._frm_presets,
@@ -144,23 +152,35 @@ class MetronomeView(ToolView):
 
 
     def _handle_start_btn_click(self):
-        if mt_service.metronome_is_active():
-            mt_service.metronome_stop()
+        if mt_service.metr_is_active():
+            mt_service.metr_stop()
             self._var_start_txt.set("Start")
         else:
-            mt_service.metronome_start()
+            mt_service.metr_start()
             self._var_start_txt.set("Stop")
     
     def _handle_set_bpm_btn_click(self):
-        bpm = mt_service.metronome_set_bpm(self._ent_bpm.get())
+        bpm = mt_service.metr_set_bpm(self._ent_bpm.get())
         if bpm:
             self._update_frm_header_bpm(bpm)
             self._hide_error()
         else:
-            self._show_error("Enter a bpm value between 1 and 500")
+            self._show_validation_error()
+    
+    def _handle_save_bpm_btn_click(self):
+        preset = mt_service.metr_save_preset(self._ent_bpm.get(), 1, 4)
+        if preset:
+            presets = mt_service.metr_get_presets()
+            self._presets_view.update_view(presets)
+            self._hide_error()
+        else: 
+            self._show_validation_error()
+    
+    def _show_validation_error(self):
+        self._show_error(f"Enter a bpm value between {METR_BPM_MIN} and {METR_BPM_MAX}")
     
     def _handle_beats_option_select(self, beats):
-        mt_service.metronome_set_beats_per_bar(beats)
+        mt_service.metr_set_beats_per_bar(beats)
         self._update_frm_header_beats(beats)
     
     def _update_frm_header_bpm(self, bpm: int):
@@ -170,8 +190,14 @@ class MetronomeView(ToolView):
     def _update_frm_header_beats(self, beats: int):
         self._var_beats_txt.set(f"Beats per bar: {beats}")
 
-    def _handle_preset_btn_click(self):
-        pass
+    def _handle_preset_btn_click(self, bpm: int):
+        bpm = mt_service.metr_set_bpm(bpm)
+        if bpm:
+            self._update_frm_header_bpm(bpm)
+            self._var_bpm_entry_txt.set(str(bpm))
+            self._hide_error()
    
-    def _handle_preset_delete_btn_click(self):
-        pass
+    def _handle_preset_delete_btn_click(self, preset_id: str):
+        mt_service.metr_delete_preset(preset_id)
+        presets = mt_service.metr_get_presets()
+        self._presets_view.update_view(presets)

@@ -4,3 +4,5 @@ __pycache__
 htmlcov
 musictools/data/tf_presets.csv
 musictools/data/test_tf_presets.csv
+musictools/data/metr_presets.csv
+musictools/data/test_metr_presets.csv
