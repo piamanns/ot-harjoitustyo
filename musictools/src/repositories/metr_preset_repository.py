@@ -20,7 +20,7 @@ class MetrPresetRepository:
         presets = self.__read_presets()
         presets_updated = [preset for preset in presets if preset.id != preset_id]
         self.__write_presets(presets_updated)
-    
+
     def delete_all(self):
         self.__write_presets([])
 
