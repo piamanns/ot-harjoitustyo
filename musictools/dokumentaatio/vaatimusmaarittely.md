@@ -23,9 +23,9 @@ Jos sovellusta on käytetty aikaisemmin, sovellus avautuu siihen tilaan, johon t
 ### Metronomi
 
 - Käyttäjä voi asettaa tempon (bpm) **(tehty)**
-- Käyttäjä voi valita tahtilajin. Metronomi painottaa tahtien ykkösiskuja tahtilajin mukaisesti.
+- Käyttäjä voi valita tahtilajin. Metronomi painottaa tahtien ykkösiskuja tahtilajin mukaisesti. **(osittain tehty, käyttäjä voi asettaa iskujen määrän tahdissa, jolloin metronomi painottaa ykkösiskuja)**
 - Käyttäjä voi käynnistää ja pysäyttää metronomin **(tehty)**
-- Käyttäjä voi nimetä, tallentaa ja ladata metronomin asetukset. Käyttäjä voi myös poistaa aiemmin tallennettuja metronomin asetuksia.
+- Käyttäjä voi nimetä, tallentaa ja ladata metronomin asetukset. Käyttäjä voi myös poistaa aiemmin tallennettuja metronomin asetuksia. **(osittain tehty, tallennus, lataaminen ja poisto onnistuvat. Tallennettavan asetuksen nimeäminen on vielä työn alla.)**
 
 ## Jatkokehitysideoita
 
@@ -39,6 +39,7 @@ Ajan salliessa perusversiota voidaan laajentaa esimerkiksi seuraavilla toiminnal
 
 ### Metronomi
 
+- Metronomi laskee bpm-arvon tahdin naputuksen perusteella
 - Metronomin visualisonti, joka auttaa hahmottamaan tahtia myös silloin, kun metronomia ei oman soiton takia kuule
 - Käyttäjä voi valita, kuinka monta tahtia metronomi tikittää
 - Käyttäjä voi asettaa metronomille halutun pituisen intron, joka eroaa äänensävyltään varsinaisesta metronomiäänestä

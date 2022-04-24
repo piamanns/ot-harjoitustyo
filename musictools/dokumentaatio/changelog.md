@@ -19,6 +19,11 @@
 ## Viikko 5
 - Sovellukseen lisätty metronomi.
 - Käyttäjä voi asettaa metronomille bpm-arvon. Jos syöte on virheellinen, käyttöliittymässä näytetään virheviesti.
-- Sekä ääniraudan että metronomin syötteiden validointi siirretty pois käyttöliittymäluokista, äänirauta- ja metronomiluokkiin.
-- Ääniraudalle ja metronomille omat ikonit
-- Lisätty yksikkötestejä metronomille.
+- Metronomin bpm-arvoja voi tallentaa. Kun sovellus käynnistyy, tallennetut bpm-arvot näkyvät nappeina käyttöliittymässä. 
+- Metronomin esiasetuksille luotu oma MetrPresets-luokka.
+- Myös metronomin asetusten tallennus toistaiseksi CSV-tiedostoon.
+- Käyttäjä voi poistaa metronomin esisasetettuja bpm-arvoja.
+- Sekä ääniraudan että metronomin syötteiden validointi siirretty pois käyttöliittymäluokista, äänirauta- ja metronomiluokkiin. Työkalujen maksimi- ja minimiarvot siirretty ympäristömuuttujiksi.
+- UI-näkymien laaja refaktorointi. Lisätty yliluokka ToolView työkaluille. Äänirauta ja metronomi hyödyntävät nyt samaa esiasetusnäkymäluokkaa PresetsView.
+- Ääniraudalle ja metronomille omat konfiguroitavat ikonit
+- Lisätty yksikkötestejä metronomille sekä tallennettujen asetusten lukemisesta ja kirjoittamisesta vastaavalle MetrPresetRepository-luokalle.
