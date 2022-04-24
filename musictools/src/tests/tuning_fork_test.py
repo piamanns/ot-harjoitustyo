@@ -1,5 +1,6 @@
 import unittest
 from entities.tuning_fork import TuningFork
+from config import TF_FREQ_MIN, TF_FREQ_MAX
 
 
 class TestTuningFork(unittest.TestCase):
@@ -10,15 +11,23 @@ class TestTuningFork(unittest.TestCase):
         self.tuning_fork.set_frequency(650)
         self.assertEqual(self.tuning_fork.get_frequency(), 650)
     
-    def test_setting_tuning_fork_to_non_float_freq_does_nothing(self):
+    def test_setting_tuning_fork_to_non_float_freq_does_nothing_returns_None(self):
         self.tuning_fork.set_frequency(440)
-        self.tuning_fork.set_frequency("abc")
+        freq = self.tuning_fork.set_frequency("abc")
         self.assertEqual(self.tuning_fork.get_frequency(), 440)
+        self.assertEqual(freq, None)
     
-    def test_setting_tuning_fork_to_negative_freq_does_nothing(self):
+    def test_setting_tuning_fork_freq_to_less_than_min_value_does_nothing_returns_None(self):
         self.tuning_fork.set_frequency(440)
-        self.tuning_fork.set_frequency(-440)
+        freq = self.tuning_fork.set_frequency(-1*int(TF_FREQ_MIN))
         self.assertEqual(self.tuning_fork.get_frequency(), 440)
+        self.assertEqual(freq, None)
+
+    def test_setting_tuning_fork_freq_to_more_than_max_value_does_nothing_returns_None(self):
+        self.tuning_fork.set_frequency(440)
+        freq = self.tuning_fork.set_frequency(int(TF_FREQ_MAX)+1)
+        self.assertEqual(self.tuning_fork.get_frequency(), 440)
+        self.assertEqual(freq, None)
 
     def test_tuning_fork_is_active_returns_correct_value_when_tf_not_started(self):
         is_active = self.tuning_fork.is_active()

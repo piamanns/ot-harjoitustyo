@@ -7,6 +7,7 @@ class FakeTfPresetRepository:
 
     def save(self, tf_preset):
         self.presets.append(tf_preset)
+        return tf_preset
     
     def get_all(self):
         return self.presets
