@@ -11,16 +11,33 @@ classDiagram
         +is_active()
         +set_frequency(freq)
         +get_frequency()
+        +validate_frequency()
     }
     
     class TfPreset{
         +id
         +freq
         +label
+        +get_value()
     }
+    
     class Metronome{
+        +start()
+        +stop()
+        +is_active()
+        +set_bpm()
+        +get_bpm()
+        +set_beats_per_bar()
+        +get_beats_per_bar()
+        +validate_bpm()
     }
+    
     class MetrPreset{
+        +id
+        +bpm
+        +beats_per_bar
+        +beat_unit
+        +get_value()
     }    
 ```
 ### Pakkaus- ja luokkkaavio:
@@ -59,6 +76,7 @@ sequenceDiagram
     TuningFork-->>MusictoolsService: 440.0
     MusictoolsService->>preset: TfPreset(440.0, "A")
     MusictoolsService->>TfPresetRepository: save(preset):
+    TfPresetRepository-->>MusictoolsService: preset
     MusictoolsService -->>UI: preset
     UI->>MusictoolsService: tfork_get_presets()
     MusictoolsService->>TfPresetRepository: get_all()
