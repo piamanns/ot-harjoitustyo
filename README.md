@@ -29,7 +29,15 @@ cd musictools
 poetry install
 ```
 
-2. Käynnistä sovellus komennolla
+3. Alusta sovelluksen käyttämä tietokanta komennolla
+
+```bash
+poetry run invoke init-database
+```
+
+Jos tietokanta on jo olemassa, komento nollaa tietokannan.
+
+4. Käynnistä sovellus komennolla
 
 ```bash
 poetry run invoke start

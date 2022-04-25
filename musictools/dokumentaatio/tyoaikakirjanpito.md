@@ -20,4 +20,5 @@
 | 20.4. | 2 | Maksimi- ja minimiarvot ääniraudan ja metronomin asetuksille ympäristömuuttujiksi. Metronomille mahdollisuus asettaa iskujen määrä tahdissa, jolloin metronomi painottaa tahdin ensimmäistä iskua erilaisella klikki-äänellä.
 | 23.4. | 3 | Ui-luokkien refaktorointia, jotta sekä äänirauta että metronomi voivat käyttää samaa presets-näkymää. Työkalunäkymille yhteinen yliluokka.
 | 24.4. | 2 | Toteutus metronomin esiasetusten tallentamiselle, lataamiselle ja poistamiselle.
-| yht | 67 | |
+| 25.4 | 3 | SQLite-tietokannan käyttöönotto ääniraudan ja metronomin esiasetusten tallentamiseen.
+| yht | 70 | |
