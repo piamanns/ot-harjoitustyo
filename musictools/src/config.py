@@ -8,10 +8,8 @@ try:
 except FileNotFoundError:
     print(".env-file not found")
 
-TF_PRESETS_FILENAME = os.getenv("TF_PRESETS_FILENAME") or "tf_presets.csv"
-TF_PRESETS_PATH = os.path.join(dirname, "..", "data", TF_PRESETS_FILENAME)
-METR_PRESETS_FILENAME = os.getenv("METR_PRESETS_FILENAME") or "metr_presets.csv"
-METR_PRESETS_PATH = os.path.join(dirname, "..", "data", METR_PRESETS_FILENAME)
+DATABASE_FILENAME = os.getenv("DATABASE_FILENAME") or "database.sqlite"
+DATABASE_PATH = os.path.join(dirname, "..", "data", DATABASE_FILENAME)
 METR_CLICK_FILENAME = os.getenv("METR_CLICK_FILENAME") or "click.wav"
 METR_CLICK_PATH = os.path.join(dirname, "sounds", METR_CLICK_FILENAME)
 METR_CLICK_UP_FILENAME = os.getenv("METR_CLICK_UP_FILENAME") or "click.wav"

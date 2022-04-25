@@ -1,48 +1,47 @@
-from pathlib import Path
-from config import TF_PRESETS_PATH
+from database_connection import get_database_connection
 from entities.tf_preset import TfPreset
 
 
 class TfPresetRepository:
-    def __init__(self, tf_presets_path: str):
-        self.__tf_presets_path = tf_presets_path
+    def __init__(self, connection):
+        self._connection = connection
         #self.__tf_presets = [(440, "A"), (293.66, "D"),
                              #(196, "G"), (659.25, "E"), (466.16, "Bb")]
     def get_all(self):
-        Path(self.__tf_presets_path).touch()
-        return self.__read_presets()
+        cursor = self._connection.cursor()
 
-    def save(self, tf_preset):
-        presets = self.__read_presets()
-        presets.append(tf_preset)
-        self.__write_presets(presets)
-        return tf_preset
+        cursor.execute("SELECT * FROM tf_presets")
 
-    def delete(self, preset_id):
-        presets = self.__read_presets()
-        presets_updated = [preset for preset in presets if preset.id != preset_id]
-        self.__write_presets(presets_updated)
+        rows = cursor.fetchall()
+        return list(map(self._parse_preset, rows))
+
+    def _parse_preset(self, row):
+        return TfPreset(row["freq"], row["label"], row["id"]) if row else None
+
+    def save(self, preset: TfPreset):
+        cursor = self._connection.cursor()
+
+        cursor.execute(
+            "INSERT INTO tf_presets (freq, label) VALUES (:freq, :label)",
+            {"freq": preset.freq, "label": preset.label}
+        )
+        preset.id = cursor.lastrowid
+        self._connection.commit()
+        return preset
+
+    def delete(self, preset_id: str):
+        cursor = self._connection.cursor()
+
+        cursor.execute(
+            "DELETE FROM tf_presets WHERE id=:id",
+            {"id": preset_id}
+        )
+
+        self._connection.commit()
 
     def delete_all(self):
-        self.__write_presets([])
+        cursor = self._connection.cursor()
 
-    def __read_presets(self):
-        presets = []
+        cursor.execute("DELETE from tf_presets")
 
-        with open(self.__tf_presets_path, encoding="utf-8") as file:
-            for row in file:
-                row = row.strip()
-                parts = row.split(";")
-                preset_id = parts[0]
-                freq = float(parts[1])
-                label = parts[2]
-                presets.append(TfPreset(freq, label, preset_id))
-
-            return presets
-
-    def __write_presets(self, presets):
-        with open(self.__tf_presets_path, "w", encoding="utf-8") as file:
-            for preset in presets:
-                file.write(f"{preset.id};{preset.freq};{preset.label}\n")
-
-tf_preset_repository = TfPresetRepository(TF_PRESETS_PATH)
+tf_preset_repository = TfPresetRepository(get_database_connection())

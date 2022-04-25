@@ -39,8 +39,7 @@ class MusictoolsService:
     def tfork_save_preset(self, freq: float, label: str):
         freq = self.tfork_validate_freq(freq)
         if freq:
-            preset = TfPreset(freq, label)
-            return self._tf_preset_repository.save(preset)
+            return self._tf_preset_repository.save(TfPreset(freq, label))
         return None
 
     def tfork_delete_preset(self, preset_id: str):

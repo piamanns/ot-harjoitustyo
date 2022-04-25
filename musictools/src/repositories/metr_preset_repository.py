@@ -1,51 +1,47 @@
-from pathlib import Path
-from config import METR_PRESETS_PATH
+from database_connection import get_database_connection
 from entities.metr_preset import MetrPreset
 
 
 class MetrPresetRepository:
-    def __init__(self, metr_presets_path: str):
-        self.__metr_presets_path = metr_presets_path
+    def __init__(self, connection):
+        self._connection = connection
 
     def get_all(self):
-        return self.__read_presets()
+        cursor = self._connection.cursor()
 
-    def save(self, metr_preset):
-        presets = self.get_all()
-        presets.append(metr_preset)
-        self.__write_presets(presets)
-        return metr_preset
+        cursor.execute("SELECT * FROM metr_presets")
+
+        rows = cursor.fetchall()
+        return list(map(self._parse_preset, rows))
+
+    def _parse_preset(self, row):
+        return MetrPreset(row["bpm"], row["bpbar"], row["bunit"], row["id"]) if row else None
+
+    def save(self, preset):
+        cursor = self._connection.cursor()
+
+        cursor.execute(
+            "INSERT INTO metr_presets (bpm, bpbar, bunit) VALUES (:bpm, :bpbar, :bunit)",
+            {"bpm": preset.bpm, "bpbar": preset.beats_per_bar,
+            "bunit": preset.beat_unit}
+        )
+        preset.id = cursor.lastrowid
+        self._connection.commit()
+        return preset
 
     def delete(self, preset_id):
-        presets = self.__read_presets()
-        presets_updated = [preset for preset in presets if preset.id != preset_id]
-        self.__write_presets(presets_updated)
+        cursor = self._connection.cursor()
+
+        cursor.execute(
+            "DELETE FROM metr_presets WHERE id=:id",
+            {"id": preset_id}
+        )
+
+        self._connection.commit()
 
     def delete_all(self):
-        self.__write_presets([])
+        cursor = self._connection.cursor()
 
-    def __read_presets(self):
-        Path(self.__metr_presets_path).touch()
-        presets = []
+        cursor.execute("DELETE from metr_presets")
 
-        with open(self.__metr_presets_path, encoding="utf-8") as file:
-            for row in file:
-                row = row.strip()
-                parts = row.split(";")
-                preset_id = parts[0]
-                bpm = int(parts[1])
-                beats_per_bar = int(parts[2])
-                beat_unit = int(parts[3])
-                presets.append(MetrPreset(bpm, beats_per_bar, beat_unit, preset_id))
-
-            return presets
-
-    def __write_presets(self, presets):
-        Path(self.__metr_presets_path).touch()
-        with open(self.__metr_presets_path, "w", encoding="utf-8") as file:
-            for preset in presets:
-                file.write(
-                    f"{preset.id};{preset.bpm};{preset.beats_per_bar};{preset.beat_unit}\n"
-                )
-
-metr_preset_repository = MetrPresetRepository(METR_PRESETS_PATH)
+metr_preset_repository = MetrPresetRepository(get_database_connection())

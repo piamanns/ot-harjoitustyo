@@ -2,7 +2,5 @@
 __pycache__
 .coverage
 htmlcov
-musictools/data/tf_presets.csv
-musictools/data/test_tf_presets.csv
-musictools/data/metr_presets.csv
-musictools/data/test_metr_presets.csv
+musictools/data/database.sqlite
+musictools/data/test-database.sqlite
