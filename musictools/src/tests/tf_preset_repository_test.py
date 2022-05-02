@@ -6,9 +6,9 @@ from entities.tf_preset import TfPreset
 class TestTfPresetRepository(unittest.TestCase):
     def setUp(self):
         tf_preset_repository.delete_all()
-        self.preset_a = TfPreset(440, "A")
-        self.preset_b = TfPreset(466.16, "Bb")
-        self.preset_c = TfPreset(261.63, "C")
+        self.preset_a = TfPreset(440, "A4")
+        self.preset_b = TfPreset(466.16, "B4")
+        self.preset_c = TfPreset(261.63, "C4")
 
     def test_saving_first_preset_works(self):
         tf_preset_repository.save(self.preset_a)

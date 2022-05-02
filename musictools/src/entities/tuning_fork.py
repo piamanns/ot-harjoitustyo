@@ -1,16 +1,16 @@
 import math
 import sounddevice as sd
 import numpy as np
-from config import TF_FREQ_MAX, TF_FREQ_MIN
+from config import TF_BASE_A, TF_FREQ_MAX, TF_FREQ_MIN
 
 
 class TuningFork:
-    def __init__(self, frequency=440):
+    def __init__(self, frequency=int(TF_BASE_A), base_a=int(TF_BASE_A)):
         self._frequency = frequency
         self._sample_rate = 44100
         self._stream = None
         self._start_idx = 0
-        self._note_analyzer = NoteAnalyzer()
+        self._note_analyzer = NoteAnalyzer(base_a)
 
     def _callback(self, outdata, frames, time, status):
         if status:
@@ -56,7 +56,7 @@ class TuningFork:
 
 
 class NoteAnalyzer:
-    def __init__(self, base_a=440):
+    def __init__(self, base_a=int(TF_BASE_A)):
         self._base_freq = base_a
         self._base_octave = 4
         self._note_names = [
@@ -65,7 +65,7 @@ class NoteAnalyzer:
         ]
 
     def _calc_half_steps(self, freq: float):
-        half_steps = (math.log2(freq) - math.log2(440)) * 12
+        half_steps = (math.log2(freq) - math.log2(self._base_freq)) * 12
         return round(half_steps)
 
     def _get_note_name(self, half_steps: int):

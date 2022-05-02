@@ -18,7 +18,7 @@ TF_ICON_FILENAME = os.getenv("TF_ICON_FILENAME") or "icons8-tuning-fork-96.png"
 TF_ICON_PATH = os.path.join(dirname, "images", TF_ICON_FILENAME)
 METR_ICON_FILENAME = os.getenv("METR_ICON_FILENAME") or "icons8-metronome-96.png"
 METR_ICON_PATH = os.path.join(dirname, "images", METR_ICON_FILENAME)
-
+TF_BASE_A = os.getenv("TF_BASE_A") or 440
 TF_FREQ_MAX = os.getenv("TF_FREQ_MAX") or 8000
 TF_FREQ_MIN =  os.getenv("TF_FREQ_MIN") or 20
 METR_BPM_MAX = os.getenv("METR_BPM_MAX") or 500
