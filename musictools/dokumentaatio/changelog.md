@@ -26,3 +26,11 @@
 - UI-näkymien laaja refaktorointi. Lisätty yliluokka ToolView työkaluille. Äänirauta ja metronomi hyödyntävät nyt samaa esiasetusnäkymäluokkaa PresetsView.
 - Ääniraudalle ja metronomille omat konfiguroitavat ikonit
 - Lisätty yksikkötestejä metronomille sekä tallennettujen asetusten lukemisesta ja kirjoittamisesta vastaavalle MetrPresetRepository-luokalle.
+
+## Viikko 6
+- Ääniraudalle lisätty ominaisuus, joka osaa laskea ja generoida sävelnimen, joka vastaa syötettyä frekvenssiä.
+- Sävelnimen generoimisesta vastaa uusi NoteAnalyzer-luokka.
+- Sävelnimi näytetään äänirauta-ikonin alla frekvenssin yhteydessä.
+- Sävelnimi tallennetaan myös automaattisesti frekvenssi-esiasetuksen label-tekstiksi, joka näytetään osana esiasetusnapin tekstiä.
+- NoteAnalyzerin käyttämän referenssi-A:n frekvenssi on asetettavissa ympäristömuuttujan avulla.
+- Lisätty NoteAnalyzerin toimintaa testaavia yksikkötestejä.

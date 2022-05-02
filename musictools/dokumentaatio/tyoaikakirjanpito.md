@@ -21,4 +21,6 @@
 | 23.4. | 3 | Ui-luokkien refaktorointia, jotta sekä äänirauta että metronomi voivat käyttää samaa presets-näkymää. Työkalunäkymille yhteinen yliluokka.
 | 24.4. | 2 | Toteutus metronomin esiasetusten tallentamiselle, lataamiselle ja poistamiselle.
 | 25.4 | 3 | SQLite-tietokannan käyttöönotto ääniraudan ja metronomin esiasetusten tallentamiseen.
-| yht | 70 | |
+| 1.5 | 2 | POC-toteutus sävelnimen laskemiselle annetun frekvenssin perusteella.
+| 2.5 | 4 | Sävelnimen generoimisesta vastaavan NoteAnalyzer-luokan toteutus ja liittäminen sovellukseen. Yksikkötestit uudelle luokalle.
+| yht | 76 | |
