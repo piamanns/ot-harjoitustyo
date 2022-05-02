@@ -3,10 +3,25 @@ from entities.metr_preset import MetrPreset
 
 
 class MetrPresetRepository:
+    """The class responsible for database operations regarding metronome presets.
+    """
+
     def __init__(self, connection):
+        """The class constructor.
+
+        Args:
+            connection: The Connection-object representing the database.
+        """
+
         self._connection = connection
 
     def get_all(self):
+        """Gets all saved metronome presets
+
+        Returns:
+            A list of MetrPreset-objects.
+        """
+
         cursor = self._connection.cursor()
 
         cursor.execute("SELECT * FROM metr_presets")
@@ -15,9 +30,28 @@ class MetrPresetRepository:
         return list(map(self._parse_preset, rows))
 
     def _parse_preset(self, row):
+        """Helper function for parsing preset data.
+
+        Args:
+            row: An instance of the class sqlite3.Row with data for a single preset.
+
+        Returns:
+            A MetrPreset-object.
+        """
+
         return MetrPreset(row["bpm"], row["bpbar"], row["bunit"], row["id"]) if row else None
 
     def save(self, preset):
+        """Saves a preset for the Metronome.
+
+        Args:
+            preset: The preset to be saved as a MetrPreset-object.
+
+        Returns:
+            The saved preset as a MetrPreset-object, now with
+            the created preset-id.
+        """
+
         cursor = self._connection.cursor()
 
         cursor.execute(
@@ -30,6 +64,12 @@ class MetrPresetRepository:
         return preset
 
     def delete(self, preset_id):
+        """Deletes the metronome preset with the given id.
+
+        Args:
+            preset_id: The id of the preset to be deleted as a string.
+        """
+
         cursor = self._connection.cursor()
 
         cursor.execute(
@@ -40,6 +80,9 @@ class MetrPresetRepository:
         self._connection.commit()
 
     def delete_all(self):
+        """Deletes all metronome presets.
+        """
+
         cursor = self._connection.cursor()
 
         cursor.execute("DELETE from metr_presets")
