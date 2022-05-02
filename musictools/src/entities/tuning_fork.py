@@ -27,7 +27,7 @@ class TuningFork:
         self._sample_rate = 44100
         self._stream = None
         self._start_idx = 0
-        self._note_analyzer = NoteAnalyzer(base_a)
+        self._note_analyzer = NoteAnalyzer(int(base_a))
 
     def _callback(self, outdata, frames, time, status):
         """Callback function for the sounddevice output stream.
