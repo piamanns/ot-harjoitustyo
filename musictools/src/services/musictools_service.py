@@ -27,6 +27,9 @@ class MusictoolsService:
     def tfork_stop(self):
         self._tfork.stop()
 
+    def tfork_get_freq(self):
+        return self._tfork.get_frequency()
+
     def tfork_set_freq(self, freq: float):
         return self._tfork.set_frequency(freq)
 
@@ -36,14 +39,18 @@ class MusictoolsService:
     def tfork_get_presets(self):
         return self._tf_preset_repository.get_all()
 
-    def tfork_save_preset(self, freq: float, label: str):
+    def tfork_save_preset(self, freq: float):
         freq = self.tfork_validate_freq(freq)
         if freq:
+            label = self.tfork_get_note_name(freq)
             return self._tf_preset_repository.save(TfPreset(freq, label))
         return None
 
     def tfork_delete_preset(self, preset_id: str):
         self._tf_preset_repository.delete(preset_id)
+
+    def tfork_get_note_name(self, freq: float):
+        return self._tfork.get_note_name(freq)
 
     def metr_is_active(self):
         return self._metronome.is_active()

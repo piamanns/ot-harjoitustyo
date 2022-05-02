@@ -52,8 +52,10 @@ class PresetsView:
                     master=self._frm_preset_buttons,
                     text=str(preset),
                     pady=5,
-                    command=lambda value=preset.get_value(): self._handle_preset_btn_click(
-                        value)
+                    command=lambda value=preset.get_value(), label=preset.get_label():
+                        self._handle_preset_btn_click(
+                            value, label
+                        )
                 )
                 btn.grid(column=pos % cols, row=pos//cols, padx=(3,0))
                 pos += 1

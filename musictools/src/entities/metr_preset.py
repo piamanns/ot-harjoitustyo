@@ -12,3 +12,6 @@ class MetrPreset:
 
     def get_value(self):
         return self.bpm
+
+    def get_label(self):
+        return ""

@@ -3,7 +3,7 @@ from tkinter import ttk
 from ui.tool_view_base import ToolView
 from ui.presets_view import PresetsView
 from services.musictools_service import mt_service
-from config import TF_ICON_PATH
+from config import TF_ICON_PATH, TF_FREQ_MAX, TF_FREQ_MIN
 
 
 class TuningForkView(ToolView):
@@ -38,8 +38,10 @@ class TuningForkView(ToolView):
         self._img_tf = tk.PhotoImage(file=TF_ICON_PATH)
         cnv_tf.create_image(48, 48, image=self._img_tf)
    
+        freq = mt_service.tfork_get_freq()
+        note_name = mt_service.tfork_get_note_name(freq)
         self._var_freq_txt = tk.StringVar()
-        self._var_freq_txt.set("Tuning Fork\n(440 Hz)")
+        self._update_tf_header(freq, note_name)
 
         lbl_tuningfork = tk.Label(
             master=frm_header,
@@ -112,8 +114,8 @@ class TuningForkView(ToolView):
         self._presets_view.pack()
         self._frm_presets.grid(sticky=(tk.W, tk.E))
 
-    def _update_tf_header(self, freq: float):
-        label_text = f"Tuning Fork\n({freq} Hz)"
+    def _update_tf_header(self, freq: float, label: str):
+        label_text = f"Tuning Fork\n{freq} Hz ({label})"
         self._var_freq_txt.set(label_text)
    
     def _handle_play_btn_click(self):
@@ -127,13 +129,14 @@ class TuningForkView(ToolView):
     def _handle_set_btn_click(self):
         freq = mt_service.tfork_set_freq(self._ent_freq.get())
         if freq:  
-            self._update_tf_header(freq)
+            label = mt_service.tfork_get_note_name(freq)
+            self._update_tf_header(freq, label)
             self._hide_error()
         else: 
             self._show_validation_error()
       
     def _handle_save_btn_click(self):
-        preset = mt_service.tfork_save_preset(self._ent_freq.get(), "?")
+        preset = mt_service.tfork_save_preset(self._ent_freq.get())
         if preset:
             presets = mt_service.tfork_get_presets()
             self._presets_view.update_view(presets)
@@ -142,12 +145,12 @@ class TuningForkView(ToolView):
             self._show_validation_error()
 
     def _show_validation_error(self):
-        self._show_error("Enter a frequency between 20 and 8000 Hz")
+        self._show_error(f"Enter a frequency between {TF_FREQ_MIN} and {TF_FREQ_MAX} Hz")
     
-    def _handle_preset_btn_click(self, freq: float):
+    def _handle_preset_btn_click(self, freq: float, label: str):
         freq = mt_service.tfork_set_freq(freq)
         if freq:
-            self._update_tf_header(freq)
+            self._update_tf_header(freq, label)
             self._var_entry_txt.set(str(freq))
             self._hide_error()
     

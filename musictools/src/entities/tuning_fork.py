@@ -1,3 +1,4 @@
+import math
 import sounddevice as sd
 import numpy as np
 from config import TF_FREQ_MAX, TF_FREQ_MIN
@@ -9,6 +10,7 @@ class TuningFork:
         self._sample_rate = 44100
         self._stream = None
         self._start_idx = 0
+        self._note_analyzer = NoteAnalyzer()
 
     def _callback(self, outdata, frames, time, status):
         if status:
@@ -48,3 +50,36 @@ class TuningFork:
 
     def get_frequency(self):
         return self._frequency
+
+    def get_note_name(self, freq: float):
+        return self._note_analyzer.get_note_name(freq)
+
+
+class NoteAnalyzer:
+    def __init__(self, base_a=440):
+        self._base_freq = base_a
+        self._base_octave = 4
+        self._note_names = [
+            "A", "A#/Bb", "B", "C", "C#/Db", "D",
+            "D#/Eb", "E", "F", "F#/Gb", "G", "G#Ab"
+        ]
+
+    def _calc_half_steps(self, freq: float):
+        half_steps = (math.log2(freq) - math.log2(440)) * 12
+        return round(half_steps)
+
+    def _get_note_name(self, half_steps: int):
+        name = self._note_names[half_steps % 12]
+        octave = self._get_octave(half_steps)
+        return f"{name}{octave}"
+
+    def _get_octave(self, half_steps: int):
+        if half_steps > 2:
+            return self._base_octave + 1 + (half_steps-3)//12
+        if half_steps < -9:
+            return self._base_octave + (half_steps+9)//12
+        return self._base_octave
+
+    def get_note_name(self, freq: float):
+        half_steps = self._calc_half_steps(freq)
+        return self._get_note_name(half_steps)
