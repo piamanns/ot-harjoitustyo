@@ -13,7 +13,7 @@ Sovelluksen pakkaus- ja luokkarakenne näyttää seuraavalta:
 
 Sovelluksen käynnistyessä luokka [UI](../src/ui/ui.py) avaa rinnakkain samaan ikkunaan äänirauta- ja metronominäkymät, jotka ovat toteutettu omina luokkinaan ([TuningForkView](../src/ui/tuning_fork_view.py) sekä [MetronomeView](../src/ui/metronome_view.py)). Äänirauta- ja metronominäkymät perivät molemmat [ToolView-luokan](../src/ui/tool_view_base.py), joka sisältää yhteisiä toiminnallisuuksia.  
 
-Sekä äänirauta että metronomi hyödyntävät [PresetsView-luokkaa](../src/ui/presets_view.py) tallennettujen esiasetusten näyttämiseen ja hallinnoimiseen.
+Sekä äänirauta että metronomi hyödyntävät omaa instanssia [PresetsView-luokkasta](../src/ui/presets_view.py) tallennettujen esiasetusten näyttämiseen ja hallinnoimiseen.
 
 Sovelluslogiikka on eristetty luokkaan [MusictoolsService](../src/services/musictools_service.py), jonka tarjoamia metodeja käyttöliittymän luokat tarvittaessa kutsuvat. 
 
@@ -32,7 +32,7 @@ Esiasetusten käsittelemiseen MusictoolsService käyttää luokkien [TfPresetRep
 Sovelluksen tietokohteita ovat entities-pakkauksessa sijaitsevat äänirautaa kuvaava luokka [TuningFork](../src/entities/tuning_fork.py), sekä metronomia kuvaava luokka [Metronome](../src/entities/metronome.py).  
 Äänirauta- ja metronomiluokkien vastuulla on myös työkaluille syötettyjen arvojen validointi. Validoinnissa hyödynnetään [.env-tiedoston](../.env) kautta muokattavissa olevia maksimi- ja minimiarvoja ääniraudan ja metronomin asetuksille. Samassa tiedostossa voi myös muokata metronomin tikitysääninä käyttämien äänitiedostojen nimiä. Äänitiedostojen on kuitenkin edelleen sijaittava hakemistossa [_sounds_](../src/sounds/).
 
-TuningFork-luokka hyödyntää apuluokkaa [NoteAnalyzer](../src/entities/tuning_fork.py#L145) sävelen nimeä annetun taajuuden pohjalta laskettaessa. Myös sävelnimen laskemissa referenssinä käytetyn a-sävelen taajuus on muokattavissa [.env-tiedostossa](../.env), muttujan TF_BASE_A avulla.
+TuningFork-luokka hyödyntää apuluokkaa [NoteAnalyzer](../src/entities/tuning_fork.py#L145) sävelen nimen laskemisessa annetun taajuuden pohjalta. Myös sävelnimen laskemissa referenssipisteenä käytetyn a-sävelen taajuus on muokattavissa [.env-tiedostossa](../.env), muttujan TF_BASE_A avulla.
 
 Luokat [TfPreset](../src/entities/tf_preset.py) ja [MetrPreset](../src/entities/metr_preset.py) kuvaavat molempien työkalujen tallennettujen esiasetusten sisältöä, sekä tarjovat julkiset metodit esiasetuksen numeraalisen arvon ja nimen lukemiseen.
 
@@ -80,14 +80,14 @@ classDiagram
 
 ## Tietojen pysyväistallennus
 
-Pakkauksesta [repositories](../src/repositories) löytyvät luokat [TfPresetRepository](../src/repositories/tf_preset_repository.py) ja [MetrPresetRepository](../src/repositories/metr_preset_repository.py) sisältävät koodin, joka vastaa musikaalisten työkalujen esiasetusten tallentamisesta, lukemisesta ja poistamisesta. TfPresetRepositoryn vastuulla ovat ääniraudan esiasetukset; MetrPresetRepository hoitaa vastaavasti metronomin esiasetukset.
+Pakkauksesta [repositories](../src/repositories) löytyvät luokat [TfPresetRepository](../src/repositories/tf_preset_repository.py) ja [MetrPresetRepository](../src/repositories/metr_preset_repository.py) sisältävät koodin, joka vastaa musikaalisten työkalujen esiasetusten tallentamisesta, lukemisesta ja poistamisesta. TfPresetRepositoryn vastuulla ovat ääniraudan esiasetukset; MetrPresetRepository hoitaa vastaavasti metronomin esiasetusten käsittelyn.
 
 Molempien musikaalisten työkalujen esiasetukset tallennetaan SQLite-tietokantaan: ääniraudan asetukset tauluun _tf_presets_ ja metronomin asetukset tauluun _metr_presets_.  
 Tietokanta on alustettava ennen sovelluksen ensimmäistä kännistystä. Tämä tapahtuu [initialize_database.py-tiedoston](../src/initialize_database.py#L51) tarjoaman initialize_database-metodin avulla.
 
-Tietokantatiedosto tallentuu [_data_-hakemistoon](../data/) tiedostonimellä, joka on muokattavaissa .env-tiedoston DATABASE_FILENAME-muuttujan avulla.
+Tietokantatiedosto tallentuu [_data_-hakemistoon](../data/) tiedostonimellä, joka on muokattavissa .env-tiedoston DATABASE_FILENAME-muuttujan avulla.
 
-Koska tallennettavien asetusten käsittely on eristetty omiin luokkiinsa, tietojen tallennustapaa on helppo muuttaa myöhemmin.
+Koska tallennettujen asetusten käsittely on eristetty omiin luokkiinsa, tietojen tallennustapaa on helppo muuttaa myöhemmin.
 
 ## Päätoiminnallisuudet:
 
@@ -118,8 +118,8 @@ sequenceDiagram
 ```
 
 Set-napin [tapahtumakäsittelijä](../src/ui/tuning_fork_view.py#L129) kutsuu sovelluslogiikkaluokan MusictoolsService tarjoamaa [tfork_set_freq-metodia](../src/services/musictools_service.py#L62), parametrina syötetty taajuus. MusictoolsService puolestaan kutsuu äänirautaluokan [set_frequency-metodia](../src/entities/tuning_fork.py#L102), joka tarkistaa, että annettu taajuus on liukuluku sekä minimi- ja maksimiarvojen sisällä.  
-Jos syötetty taajuus on oikeanmuotoinen, äänirauta-olion taajuus päivittyy ja sovelluslogiikkaluokalle palautuu hyväksytty taajuus (muutoin None). Sovelluslogiikka palauttaa hyväksytyn taajuuden UI-näkymälle, joka tämän jälkeen pyytää sovelluslogiikkaluokalta hyväksytyn taajuuden sävelnimeä, MusictoolsService-luokan tarjoaman metodin [tfork_get_note_name()](../src/services/musictools_service.py#L127) avulla.
-Sovelluslogiikka välittää tajuuden eteenpäin ääniraudan TuningFork-luokalle, joka puolestaan hyödyntää apuluokkaa [NoteAnalyzer](../src/entities/tuning_fork.py#L145) sävelnimen laskemisessa. Äänirauta palauttaa sävelnimen sisältävän merkkijono MusictoolsService-oliolle, joka puolestaan palauttaa sen UI-näkymälle. Tämän jälkeen UI-näkymä päivittää ääniraudan asetukset näyttävän ruudun [update_tf_header()-metodin](../src/ui/tuning_fork_view.py#L133) avulla.
+Jos syötetty taajuus on oikeanmuotoinen, äänirauta-olion taajuus päivittyy ja sovelluslogiikkaluokalle palautuu hyväksytty taajuus (muutoin palautuu None). Sovelluslogiikka palauttaa hyväksytyn taajuuden UI-näkymälle, joka tämän jälkeen pyytää sovelluslogiikkaluokalta hyväksytyn taajuuden sävelnimeä, MusictoolsService-luokan tarjoaman metodin [tfork_get_note_name](../src/services/musictools_service.py#L127) avulla.
+Sovelluslogiikka välittää tajuuden eteenpäin ääniraudan TuningFork-luokalle, joka puolestaan hyödyntää apuluokkaa [NoteAnalyzer](../src/entities/tuning_fork.py#L145) sävelnimen laskemisessa. Äänirauta palauttaa sävelnimen sisältävän merkkijono MusictoolsService-oliolle, joka puolestaan palauttaa sen UI-näkymälle. Tämän jälkeen UI-näkymä päivittää ääniraudan asetukset näyttävän ruudun [update_tf_header-metodin](../src/ui/tuning_fork_view.py#L117) avulla.
 
 
 ### Viritysäänen tallentaminen:
@@ -154,5 +154,6 @@ sequenceDiagram
     UI->>UI: presets_view.update_view(presets)
 ```
 
-Save-napin [tapahtumakäsittelijä](../src/ui/tuning_fork_view.py#L129) kutsuu sovelluslogiikkaluokan MusictoolsService tarjoamaa [tfork_save_preset-metodia](../src/services/musictools_service.py#L138), parametrina kenttään syötetty taajuus.  
-Sovelluslogiikka tarkistaa syötteen oikeellisuuden TuningFork-luokan [validate_frequency()-metodin](../src/entities/tuning_fork.py#L80) avulla. Äänirautaluokka palauttaa hyväksytyn taajuuden sovelluslogiikkalle, joka tämän jälkeen pyytää TuningFork-luokalta taajuutta vastaavaa sävelnimeä, vastaavalla tavalla kuin viritysäänen asettamista kuvaavassa sekvenssikaaviossa. Tämän jälkeen sovelluslogiikka luo uuden TfPreset-olion, joka saa parametreikseen taajuuden ja sävelnimen, ja antaa esiasetusolion eteenpäin TfRepository-luokalle, luokan tarjoaman [save()-metodin](../src/repositories/tf_repository.py#L45) parametrina. TfRepository palauuttaa tallennetun esiasetus-olion sovelluslogiikalle, joka välittää sen eteenpäin UI-näkymälle. UI-näkymä pyytää tämän jälkeen sovelluslogiikalta kaikkia ääniraudan tallennettuja esiasetuksia, MusictoolsService-luokan tarjoaman metodin [tfork_get_presets()](../src/musictools_service.py#L88) avulla. Sovelluslogiikka [välittää kyselyn eteenpäin](../src/musictools_service.py#L95) TfRepository-luokalle, joka [hakee tallennetut esiasetukset tietokannasta](../src/repositories/tf_repository.py#L19) ja palauttaa ne sovelluslogiikalle listana TfPreset-olioita. Sovelluslogiikka välittää oliolistan UI-näkymälle, joka tämän jälkeen päivittää esiasetusnäkymänsä kutsumalla preset-näkymää kuvaavan PresetView-luokan tarjoamaa [update_view()-metodia](../src/ui/preset_view.pyL#142).
+Save-napin [tapahtumakäsittelijä](../src/ui/tuning_fork_view.py#L129) kutsuu sovelluslogiikkaluokan MusictoolsService tarjoamaa [tfork_save_preset-metodia](../src/services/musictools_service.py#L97), parametrina kenttään syötetty taajuus.  
+Sovelluslogiikka tarkistaa syötteen oikeellisuuden TuningFork-luokan [validate_frequency-metodin](../src/entities/tuning_fork.py#L80) avulla. Äänirautaluokka palauttaa hyväksytyn taajuuden sovelluslogiikkalle, joka tämän jälkeen pyytää TuningFork-luokalta taajuutta vastaavaa sävelnimeä, vastaavalla tavalla kuin viritysäänen asettamista kuvaavassa sekvenssikaaviossa. Tämän jälkeen sovelluslogiikka luo uuden [TfPreset](../src/entities/tf_preset.py)-olion, joka saa parametreikseen taajuuden ja sävelnimen, ja antaa esiasetusolion eteenpäin TfRepository-luokalle, luokan tarjoaman [save-metodin](../src/repositories/tf_preset_repository.py#L45) parametrina.  
+TfRepository palauuttaa tallennetun esiasetus-olion sovelluslogiikalle, joka välittää sen eteenpäin UI-näkymälle. UI-näkymä pyytää tämän jälkeen sovelluslogiikalta kaikkia ääniraudan tallennettuja esiasetuksia, MusictoolsService-luokan tarjoaman metodin [tfork_get_presets](../src/services/musictools_service.py#L88) avulla. Sovelluslogiikka [välittää kyselyn eteenpäin](../src/services/musictools_service.py#L95) TfRepository-luokalle, joka [hakee tallennetut esiasetukset tietokannasta](../src/repositories/tf_preset_repository.py#L19) ja palauttaa ne sovelluslogiikalle listana TfPreset-olioita. Sovelluslogiikka palauttaa oliolistan UI-näkymälle, joka tämän jälkeen päivittää esiasetusnäkymänsä kutsumalla preset-näkymää kuvaavan PresetView-luokan tarjoamaa [update_view-metodia](../src/ui/preset_view.pyL#142).
