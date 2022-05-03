@@ -190,7 +190,7 @@ class MetronomeView(ToolView):
     def _update_frm_header_beats(self, beats: int):
         self._var_beats_txt.set(f"Beats per bar: {beats}")
 
-    def _handle_preset_btn_click(self, bpm: int):
+    def _handle_preset_btn_click(self, bpm: int, label: str):
         bpm = mt_service.metr_set_bpm(bpm)
         if bpm:
             self._update_frm_header_bpm(bpm)
