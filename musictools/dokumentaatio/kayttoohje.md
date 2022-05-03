@@ -65,11 +65,13 @@ poetry run invoke start
 ## Ohjelman käyttö
 
 Sovellus käynnistyy näkymään, jossa on rinnakkain kaksi musiikkiin liittyvää työkalua, **äänirauta** ja **metronomi**.
-(./kuvat/musictools_mainview.png)
+
+![Sovellusnäkymä](./kuvat/musictools_mainview.png)
 
 ### Äänirauta ja esiasetusten hallinnointi
 
 Ääniraudalle voi asettaa viritysäänen korkeuden kirjoittamalla haluttu taajuus _(enter frequency)_-kenttään ja painamalla nappia _Set_.
+Taajuuden voi myös asettaa esiasetusnappia painamalla, jos esiasetuksia on tallennettu.
 
 Viritysääni käynnistyy painamalla nappia _Play_ ja pysähtyy painamalla samaa nappia uudestaan.
 
@@ -77,15 +79,17 @@ Taajuuskentässä näkyvän arvon voi tallentaa esiasetukseksi _Save_-nappia pai
 
 Tallennettuja esiasetuksia voi poistaa painamalla _Manage_-nappia. Tällöin avautuu uusi näkymä, jossa tallennetut esiasetukset ovat listattu. Esiasetuksen voi poistaa painamalla esiasetuksen nimen vieressä olevaa _Delete_-nappia.
 
-Esiasetusten hallinointinäkymän voi sulkea painamalla nappia _Close_.
+Esiasetusten hallinointinäkymä suljetaan painamalla nappia _Close_.
 
-(./kuvat/musictools_manage_presets.png)
+![Sovellysnäkymä, jossa ääniraudan esiasetusten hallinnointinäkymä on auki](./kuvat/musictools_manage_presets.png)
 
 ### Metronomi
 
 Metronomille voi asettaa bpm-arvon (eli iskujen määrän minuutissa) kirjoittamalla kokonaisluku kenttään _(enter bpm)_ ja painamalla nappia _Set_.
 
 _Beats per bar_-pudotusvalikosta voi valita iskujen määrän tahdissa, jolloin metronomi painottaa tahtien ensimmäiset iskut erilaisella klikkiäänellä. Jos pudotusvalikossa on valittuna arvo 1, painotusta ei tehdä. 
+
+Metronomi käynnistyy _Start_-nappia painamalla ja pysähtyy, kun samaa nappia painaa uudestaan.
 
 Metronomin esiasetusten tallentaminen ja poistaminen toimii vastavalla tavalla kun äänirautanäkymässä.
 
