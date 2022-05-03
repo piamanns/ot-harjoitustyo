@@ -80,9 +80,9 @@ classDiagram
 
 ## Tietojen pysyväistallennus
 
-Pakkauksesta [repositories](../src/repositories) löytyvät luokat [TfPresetRepository](../src/repositories/tf_preset_repository.py) ja [MetrPresetRepository](../src/repositories/metr_preset_repository.py) sisältävät koodin, joka vastaa musikaalisten työkalujen esiasetusten tallentamisesta, lukemisesta ja poistamisesta. TfPresetRepositoryn vastuulla ovat ääniraudan esiasetukset; MetrPresetRepository hoitaa vastaavasti metronomin esiasetusten käsittelyn.
+Pakkauksesta [repositories](../src/repositories) löytyvät luokat [TfPresetRepository](../src/repositories/tf_preset_repository.py) ja [MetrPresetRepository](../src/repositories/metr_preset_repository.py) vastaavat toiminnoista, jotka liittyvät musikaalisten työkalujen esiasetusten tallentamiseen sekä tietokannasta lukemiseen ja poistamiseen. TfPresetRepositoryn vastuulla ovat ääniraudan esiasetukset; MetrPresetRepository käsittelee vastaavasti metronomin tallennettuja esiasetuksia.
 
-Molempien musikaalisten työkalujen esiasetukset tallennetaan SQLite-tietokantaan: ääniraudan asetukset tauluun _tf_presets_ ja metronomin asetukset tauluun _metr_presets_.  
+Esiasetukset tallennetaan SQLite-tietokantaan: ääniraudan asetukset tauluun _tf_presets_ ja metronomin asetukset tauluun _metr_presets_.  
 Tietokanta on alustettava ennen sovelluksen ensimmäistä kännistystä. Tämä tapahtuu [initialize_database.py-tiedoston](../src/initialize_database.py#L51) tarjoaman initialize_database-metodin avulla.
 
 Tietokantatiedosto tallentuu [_data_-hakemistoon](../data/) tiedostonimellä, joka on muokattavissa .env-tiedoston DATABASE_FILENAME-muuttujan avulla.
@@ -156,4 +156,32 @@ sequenceDiagram
 
 Save-napin [tapahtumakäsittelijä](../src/ui/tuning_fork_view.py#L129) kutsuu sovelluslogiikkaluokan MusictoolsService tarjoamaa [tfork_save_preset-metodia](../src/services/musictools_service.py#L97), parametrina kenttään syötetty taajuus.  
 Sovelluslogiikka tarkistaa syötteen oikeellisuuden TuningFork-luokan [validate_frequency-metodin](../src/entities/tuning_fork.py#L80) avulla. Äänirautaluokka palauttaa hyväksytyn taajuuden sovelluslogiikkalle, joka tämän jälkeen pyytää TuningFork-luokalta taajuutta vastaavaa sävelnimeä, vastaavalla tavalla kuin viritysäänen asettamista kuvaavassa sekvenssikaaviossa. Tämän jälkeen sovelluslogiikka luo uuden [TfPreset](../src/entities/tf_preset.py)-olion, joka saa parametreikseen taajuuden ja sävelnimen, ja antaa esiasetusolion eteenpäin TfRepository-luokalle, luokan tarjoaman [save-metodin](../src/repositories/tf_preset_repository.py#L45) parametrina.  
-TfRepository palauuttaa tallennetun esiasetus-olion sovelluslogiikalle, joka välittää sen eteenpäin UI-näkymälle. UI-näkymä pyytää tämän jälkeen sovelluslogiikalta kaikkia ääniraudan tallennettuja esiasetuksia, MusictoolsService-luokan tarjoaman metodin [tfork_get_presets](../src/services/musictools_service.py#L88) avulla. Sovelluslogiikka [välittää kyselyn eteenpäin](../src/services/musictools_service.py#L95) TfRepository-luokalle, joka [hakee tallennetut esiasetukset tietokannasta](../src/repositories/tf_preset_repository.py#L19) ja palauttaa ne sovelluslogiikalle listana TfPreset-olioita. Sovelluslogiikka palauttaa oliolistan UI-näkymälle, joka tämän jälkeen päivittää esiasetusnäkymänsä kutsumalla preset-näkymää kuvaavan PresetView-luokan tarjoamaa [update_view-metodia](../src/ui/preset_view.pyL#142).
+TfRepository palauuttaa tallennetun esiasetus-olion sovelluslogiikalle, joka välittää sen eteenpäin UI-näkymälle. UI-näkymä pyytää tämän jälkeen sovelluslogiikalta kaikkia ääniraudan tallennettuja esiasetuksia, MusictoolsService-luokan tarjoaman metodin [tfork_get_presets](../src/services/musictools_service.py#L88) avulla. Sovelluslogiikka [välittää kyselyn eteenpäin](../src/services/musictools_service.py#L95) TfRepository-luokalle, joka [hakee tallennetut esiasetukset tietokannasta](../src/repositories/tf_preset_repository.py#L19) ja palauttaa ne sovelluslogiikalle listana TfPreset-olioita. Sovelluslogiikka palauttaa oliolistan UI-näkymälle, joka tämän jälkeen päivittää esiasetusnäkymänsä kutsumalla preset-näkymää kuvaavan PresetView-luokan tarjoamaa [update_view-metodia](../src/ui/preset_view.py#L142).
+
+### Tallennetun viritysäänen poistaminen:
+
+Jos käyttäjä haluaa poistaa ääniraudalle tallennetun esiasetuksen, hän avaa ensin esiasetusten hallinointinäkymän painamalla nappia Manage. Tämän jälkeen käyttäjä painaa poistettavan esiasetuksen vieressä olevaa Delete-nappia:
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI
+    participant MusictoolsService
+    participant TfPresetRepository
+    User->>UI: click "Delete"-button
+    UI->>MusictoolsService: tfork_delete_preset("2")
+    MusictoolsService->>TfPresetRepository: delete("2")
+    UI->>MusictoolsService: tfork_get_presets()
+    MusictoolsService->>TfPresetRepository: get_all()
+    TfPresetRepository-->>MusictoolsService: presets
+    MusictoolsService-->>UI: presets
+    UI->>UI: presets_view.update_view(presets)
+```
+
+Tapahtumasarja käynnistyy UI-näkymän [Delete-napin tapahtumakäsittelijästä](../src/ui/tuning_fork_view.py#L157), joka kutsuu sovelluslogiikan metodia [tfork_delete_preset](../src/services/musictools_service.py#L118), parametrina poistettavan esiasetuksen id merkkijonoesityksenä.  
+Sovelluslogiikka kutsuu puolestaan TfPresetRepository-luokan metodia [delete](../src/repositories/tf_preset_repository.py#L66), joka poistaa kyseisen id-numeron omaavan esiasetuksen tietokannasta.  
+Tämän jälkeen UI-näkymä pyytää sovelluslogiikalta kaikkia tallennettuja ääniraudan esiasetuksia, vastaavalla tavalla kuin yllä kuvatun viritysäänen tallennuksen yhteydessä. Kun lista TfPreset-olioita palauutuu UI-näkymälle, se päivittää esiasetusnäkymänsä, jolloin poistettu esiasetus häviää näkymästä.
+
+### Metronomi ja muut toiminnot
+
+Metronomiin liittyvät toiminnallisuudet toimivat vastaavalla tavalla kuin yllä esitellyt äänirautaan liittyvät toiminnot: käyttöliittymän tapahtumakäsittelijä kutsuu MusictoolsServices-sovelluslogiikkaluokan metodeja, ja sovelluslogiikka välittää pyynnöt eteenpäin metronomi-oliolle tai pysyväistallennuksesta vastaavalle MetrPresetRepository-luokan oliolle. Tämän jälkeen sovelluslogiikka palauttaa mahdollisen vastauksen käyttöliittymälle, joka päivittää tarvittaessa näkymänsä. Sama logiikka pätee myös ääniraudan muille toiminnallisuuksille.
