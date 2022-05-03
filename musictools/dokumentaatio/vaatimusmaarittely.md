@@ -18,7 +18,7 @@ Jos sovellusta on käytetty aikaisemmin, sovellus avautuu siihen tilaan, johon t
 
 - Käyttäjä voi valita viritysäänen **(tehty)**
 - Käyttäjä voi käynnistää ja pysäyttää viritysäänen **(tehty)**
-- Käyttäjä voi nimetä, tallentaa ja ladata ääniraudan asetukset. Käyttäjä voi myös poistaa aiemmin tallennettuja ääniraudan asetuksia. **(osittain tehty, tallennus, lataaminen ja poisto onnistuvat. Tallennettavan asetuksen nimeäminen on vielä työn alla.)**
+- Käyttäjä voi nimetä, tallentaa ja ladata ääniraudan asetukset. Käyttäjä voi myös poistaa aiemmin tallennettuja ääniraudan asetuksia. **(Tallennus, lataaminen ja poisto tehty. Tallennettava taajuus nimetään automaattisesti sävelnimellä, joka on laskettu taajuuden perusteella. Tarkoituksena on toteuttaa toiminnallisuus, jonka avulla käyttäjä voi muokata automaattisesti generoitua nimeä.)**
 
 ### Metronomi
 
