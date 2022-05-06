@@ -8,10 +8,10 @@ class MetrPreset:
         self.id = preset_id
 
     def __str__(self):
-        return f"{str(self.bpm)} bpm"
+        return f"{str(self.bpm)} bpm ({self.beats_per_bar}-beat)"
 
     def get_value(self):
-        return self.bpm
+        return (self.bpm, self.beats_per_bar)
 
     def get_label(self):
         return ""

@@ -19,6 +19,7 @@ class MetronomeView(ToolView):
         self._var_error_txt = None
         self._var_bpm_entry_txt = None
         self._ent_bpm = None
+        self._var_beats_option_int = 0
 
         self._initialize()
     
@@ -107,13 +108,13 @@ class MetronomeView(ToolView):
         )
 
         beats = list(range(int(METR_BEATS_MIN), int(METR_BEATS_MAX)+1))
-        var_beats_option_int = tk.IntVar()
+        self._var_beats_option_int = tk.IntVar()
         start_index = mt_service.metr_get_beats_per_bar()
-        var_beats_option_int.set(beats[start_index-1])
+        self._var_beats_option_int.set(beats[start_index-1])
         
         dropdown = tk.OptionMenu(
             frm_beats_option,
-            var_beats_option_int, 
+            self._var_beats_option_int, 
             *beats,
             command=self._handle_beats_option_select
         )
@@ -168,7 +169,7 @@ class MetronomeView(ToolView):
             self._show_validation_error()
     
     def _handle_save_bpm_btn_click(self):
-        preset = mt_service.metr_save_preset(self._ent_bpm.get(), 1, 4)
+        preset = mt_service.metr_save_preset(self._ent_bpm.get(), self._var_beats_option_int.get(), 4)
         if preset:
             presets = mt_service.metr_get_presets()
             self._presets_view.update_view(presets)
@@ -189,12 +190,19 @@ class MetronomeView(ToolView):
 
     def _update_frm_header_beats(self, beats: int):
         self._var_beats_txt.set(f"Beats per bar: {beats}")
+    
+    def _update_frm_beats_option(self, beats_per_bar: int):
+        self._var_beats_option_int.set(beats_per_bar)
 
-    def _handle_preset_btn_click(self, bpm: int, label: str):
+    def _handle_preset_btn_click(self, beat_values: tuple, label: str):
+        bpm, beats_per_bar = beat_values
         bpm = mt_service.metr_set_bpm(bpm)
         if bpm:
             self._update_frm_header_bpm(bpm)
             self._var_bpm_entry_txt.set(str(bpm))
+            mt_service.metr_set_beats_per_bar(beats_per_bar)
+            self._update_frm_header_beats(beats_per_bar)
+            self._update_frm_beats_option(beats_per_bar)
             self._hide_error()
    
     def _handle_preset_delete_btn_click(self, preset_id: str):
