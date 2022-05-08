@@ -9,14 +9,9 @@ from config import METR_BPM_MIN, METR_BPM_MAX, METR_BEATS_MAX, METR_BEATS_MIN, M
 class MetronomeView(ToolView):
     def __init__(self, root):
         super().__init__(root)
-        self._frm_presets = None
-        self._presets_view = None
-        self._img_metr = None
-        self._lbl_error = None
         self._var_start_txt = None
         self._var_bpm_txt = None
         self._var_beats_txt = None
-        self._var_error_txt = None
         self._var_bpm_entry_txt = None
         self._ent_bpm = None
         self._var_beats_option_int = 0
@@ -40,8 +35,8 @@ class MetronomeView(ToolView):
 
         cnv_metr = tk.Canvas(master=frm_header, width=192, height=96, bg="green3",
                              highlightthickness=0)
-        self._img_metr = tk.PhotoImage(file=METR_ICON_PATH)
-        cnv_metr.create_image(96, 48, image=self._img_metr)
+        self._img_tool = tk.PhotoImage(file=METR_ICON_PATH)
+        cnv_metr.create_image(96, 48, image=self._img_tool)
 
         bpm = mt_service.metr_get_bpm()
         self._var_bpm_txt = tk.StringVar()
@@ -85,19 +80,29 @@ class MetronomeView(ToolView):
             master=frm_bpm_entry,
             text="Set",
             pady=5,
-            command=self._handle_set_bpm_btn_click
+            command=self._handle_set_btn_click
         )
 
         btn_save = tk.Button(
             master=frm_bpm_entry,
-            text="Save",
+            text="Save as new",
             pady=5,
-            command=self._handle_save_bpm_btn_click
+            command=self._handle_save_btn_click
         )
+
+        self._btn_update = tk.Button(
+            master=frm_bpm_entry,
+            text="Update",
+            pady=5,
+            command=self._handle_update_btn_click
+        )
+
+        self._disable_update_btn()
 
         self._ent_bpm.grid(row=0, column=0, ipady=5)
         btn_set.grid(row=0, column=1, padx=5)
-        btn_save.grid(row=0, column=2)
+        btn_save.grid(row=0, column=2, padx=(0,5))
+        self._btn_update.grid(row=0, column=3)
         frm_bpm_entry.grid(pady=(0,3))
 
     def _init_frm_beats_option(self):
@@ -121,6 +126,7 @@ class MetronomeView(ToolView):
 
         lbl_beats_option.grid()
         dropdown.grid(row=0, column=1)
+
         frm_beats_option.grid()
 
     def _init_frm_start_button(self):
@@ -151,6 +157,12 @@ class MetronomeView(ToolView):
         self._presets_view.pack()
         self._frm_presets.grid(sticky=(tk.W, tk.E))
 
+    def _update_frm_presets(self):
+        self._presets_view.update_view(
+            mt_service.metr_get_presets(),
+            mt_service.metr_get_active_preset()
+        )
+
     def _handle_start_btn_click(self):
         if mt_service.metr_is_active():
             mt_service.metr_stop()
@@ -159,7 +171,7 @@ class MetronomeView(ToolView):
             mt_service.metr_start()
             self._var_start_txt.set("Stop")
 
-    def _handle_set_bpm_btn_click(self):
+    def _handle_set_btn_click(self):
         bpm = mt_service.metr_set_bpm(self._ent_bpm.get())
         if bpm:
             self._update_frm_header_bpm(bpm)
@@ -167,15 +179,30 @@ class MetronomeView(ToolView):
         else:
             self._show_validation_error()
 
-    def _handle_save_bpm_btn_click(self):
+    def _handle_save_btn_click(self):
         preset = mt_service.metr_save_preset(
             self._ent_bpm.get(),
             self._var_beats_option_int.get(),
             4
         )
         if preset:
-            presets = mt_service.metr_get_presets()
-            self._presets_view.update_view(presets)
+            mt_service.metr_set_active_preset(None)
+            self._update_frm_presets()
+            self._disable_update_btn()
+            self._hide_error()
+        else:
+            self._show_validation_error()
+    
+    def _handle_update_btn_click(self):
+        active_id = mt_service.metr_get_active_preset()
+        updated_preset = mt_service.metr_update_preset(  
+            self._ent_bpm.get(),
+            self._var_beats_option_int.get(),
+            4,
+            active_id
+        )
+        if updated_preset:
+            self._update_frm_presets()
             self._hide_error()
         else:
             self._show_validation_error()
@@ -197,18 +224,26 @@ class MetronomeView(ToolView):
     def _update_frm_beats_option(self, beats_per_bar: int):
         self._var_beats_option_int.set(beats_per_bar)
 
-    def _handle_preset_btn_click(self, beat_values: tuple, label: str):
+    def _handle_preset_btn_click(self, beat_values: tuple, label: str, preset_id: int):
         bpm, beats_per_bar = beat_values
         bpm = mt_service.metr_set_bpm(bpm)
         if bpm:
+            mt_service.metr_set_active_preset(preset_id)
+            self._presets_view.update_selected(preset_id)
             self._update_frm_header_bpm(bpm)
             self._var_bpm_entry_txt.set(str(bpm))
+
             mt_service.metr_set_beats_per_bar(beats_per_bar)
             self._update_frm_header_beats(beats_per_bar)
             self._update_frm_beats_option(beats_per_bar)
+
+            self._enable_update_btn()
             self._hide_error()
 
-    def _handle_preset_delete_btn_click(self, preset_id: str):
+    def _handle_preset_delete_btn_click(self, preset_id: int):
         mt_service.metr_delete_preset(preset_id)
-        presets = mt_service.metr_get_presets()
-        self._presets_view.update_view(presets)
+        self._update_frm_presets()
+        if mt_service.metr_get_active_preset() == preset_id:
+            mt_service.metr_set_active_preset(None)
+            self._disable_update_btn()
+

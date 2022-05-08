@@ -63,6 +63,25 @@ class TfPresetRepository:
         self._connection.commit()
         return preset
 
+    def update(self, preset):
+        """Updates a saved preset for the tuning fork.
+
+        Args:
+            preset: The preset to be updated as TfPreset-object.
+
+        Returns:
+            The updated preset as a TfPreset-object.
+        """
+
+        cursor = self._connection.cursor()
+
+        cursor.execute(
+            "UPDATE tf_presets SET freq=:freq, label=:label WHERE id=:id",
+            {"freq": preset.freq, "label": preset.label, "id":preset.id}
+        )
+        self._connection.commit()
+        return preset
+
     def delete(self, preset_id: str):
         """Deletes the tuning fork preset with the given id.
 

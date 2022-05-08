@@ -5,9 +5,13 @@ from tkinter import ttk
 class ToolView:
     def __init__(self, root):
         self._root = root
+        self._img_tool = None
         self._frm_main = None
+        self._frm_presets = None
+        self._presets_view = None
         self._lbl_error = None
         self._var_error_txt = None
+        self._btn_update = None
 
     def _initialize(self):
         self._frm_main = ttk.Frame(master=self._root, borderwidth=1, relief=tk.RIDGE)
@@ -30,4 +34,9 @@ class ToolView:
 
     def _hide_error(self):
         self._lbl_error.grid_remove()
-   
+    
+    def _enable_update_btn(self):
+        self._btn_update["state"] = tk.NORMAL
+
+    def _disable_update_btn(self):
+        self._btn_update["state"] = tk.DISABLED

@@ -63,6 +63,26 @@ class MetrPresetRepository:
         self._connection.commit()
         return preset
 
+    def update(self, preset):
+        """Updates a saved metronome preset.
+
+        Args:
+            preset: The preset to be updated as MetrPreset-object.
+
+        Returns:
+            The updated preset as a MetrPreset-object.
+        """
+
+        cursor = self._connection.cursor()
+
+        cursor.execute(
+            "UPDATE metr_presets SET bpm=:bpm, bpbar=:bpbar, bunit=:bunit WHERE id=:id",
+            {"bpm": preset.bpm, "bpbar": preset.beats_per_bar,
+            "bunit": preset.beat_unit, "id":preset.id}
+        )
+        self._connection.commit()
+        return preset
+
     def delete(self, preset_id):
         """Deletes the metronome preset with the given id.
 

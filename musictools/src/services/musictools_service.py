@@ -31,6 +31,8 @@ class MusictoolsService:
         self._metronome = Metronome()
         self._tf_preset_repository = tf_preset_repository
         self._metr_preset_repository = metr_preset_repository
+        self._tfork_active_preset_id = None
+        self._metr_active_preset_id = None
 
     def tfork_is_active(self):
         """Returns the playing status of the tuning fork.
@@ -124,6 +126,25 @@ class MusictoolsService:
 
         self._tf_preset_repository.delete(preset_id)
 
+    def tfork_update_preset(self, freq: float, preset_id: int):
+        """Updates the values stored in a tuning fork preset.
+
+        Args:
+            freq: The new frequency as a float.
+            preset_id: The id of the preset to update as an integerl
+
+        Returns:
+          The updated preset as a TfPreset-object if the operation was succesful,
+          otherwise None.
+        """
+
+        freq = self.tfork_validate_freq(freq)
+        if freq:
+            label = self.tfork_get_note_name(freq)
+            preset = TfPreset(freq, label, preset_id)
+            return self._tf_preset_repository.update(preset)
+        return None
+
     def tfork_get_note_name(self, freq: float):
         """Returns the note name corresponding to the frequency.
 
@@ -135,6 +156,26 @@ class MusictoolsService:
         """
 
         return self._tfork.get_note_name(freq)
+
+    def tfork_set_active_preset(self, preset_id: int):
+        """Sets the active tuning fork preset
+
+        Args:
+            preset_id: The id corresponding to the currently selected preset
+                      as an integer.
+        """
+
+        self._tfork_active_preset_id = preset_id
+
+    def tfork_get_active_preset(self):
+        """ Returns the id of the active tuning fork preset
+
+        Returns:
+          An integer correspoinding to the id-number of the currently
+          selected tuning fork preset.
+        """
+
+        return self._tfork_active_preset_id
 
     def metr_is_active(self):
         """Returns the ticking status of the metronome.
@@ -223,9 +264,49 @@ class MusictoolsService:
         """Deletes the metronome preset with the given id
 
         Args:
-            preset_id: The id of the preset to be deleted as a string.
+            preset: The id of the preset to be deleted as a string.
         """
 
         self._metr_preset_repository.delete(preset_id)
+
+    def metr_update_preset(self, bpm: int, beats_per_bar: int, beat_unit: int, preset_id: int):
+        """Updates the values stored in a metronome preset
+
+        Args:
+            bpm: The new bpm value as an integer.
+            beats_per_bar: The new beats per bar value as an integer.
+            beat_unit: The new beat unit value as an integer.
+            preset_id: The id corresponding to the preset to be updated as an integer.
+
+        Returns:
+            The updated preset as a MetrPreset-object if the operation was succesful,
+            otherwise None.
+        """
+
+        bpm = self._metronome.validate_bpm(bpm)
+        if bpm:
+            preset = MetrPreset(bpm, beats_per_bar, beat_unit, preset_id)
+            return self._metr_preset_repository.update(preset)
+        return None
+
+    def metr_set_active_preset(self, preset_id: int):
+        """Sets the active metronome preset
+
+        Args:
+            preset_id: The id corresponding to the currently selected preset
+                      as an integer.
+        """
+
+        self._metr_active_preset_id = preset_id
+
+    def metr_get_active_preset(self):
+        """ Returns the id of the active metronome preset
+
+        Returns:
+          An integer corresponding to the id-number of the currently
+          selected metronome preset.
+        """
+
+        return self._metr_active_preset_id
 
 mt_service = MusictoolsService()

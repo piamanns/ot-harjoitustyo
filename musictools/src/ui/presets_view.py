@@ -7,11 +7,13 @@ class PresetsView:
         self._root = root
         self._frm_main = None
         self._frm_settings = None
-        self._sa_preset_buttons = None
-        self._sa_settings_buttons = None
+        self._scroll_preset_buttons = None
+        self._scroll_settings_buttons = None
         self._presets = presets
+        self._active_id = None
         self._handle_preset_btn_click = handle_preset_btn_click
         self._handle_preset_delete_btn_click = handle_preset_delete_btn_click
+ 
         self._initialize()
 
     def pack(self):
@@ -46,14 +48,14 @@ class PresetsView:
         frm_preset_buttons = ttk.Frame(master=self._frm_main, borderwidth=1, relief=tk.RIDGE)
         frm_preset_buttons.columnconfigure(0, weight=1)
 
-        self._sa_preset_buttons = ScrollableArea(frm_preset_buttons)
-        self._sa_preset_buttons.populate_content(self._populate_preset_buttons)
+        self._scroll_preset_buttons = ScrollableArea(frm_preset_buttons)
+        self._scroll_preset_buttons.populate_content(self._populate_preset_buttons)
 
         frm_preset_buttons.grid(sticky=tk.EW, pady=(0,6))
 
     def _populate_preset_buttons(self, root):
         pos = 0
-        cols = 2
+        cols = 3
 
         if len(self._presets) > 0:
             for preset in self._presets:
@@ -61,12 +63,14 @@ class PresetsView:
                     master=root,
                     text=str(preset),
                     pady=5,
-                    command=lambda value=preset.get_value(), label=preset.get_label():
+                )
+                btn.configure(command=lambda value=preset.get_value(), label=preset.get_label(), preset_id=preset.id:
                         self._handle_preset_btn_click(
-                            value, label
+                            value, label, preset_id
                         )
                 )
-                btn.grid(column=pos % cols, row=pos//cols, sticky=tk.W, padx=(3,0))
+                btn["state"] = tk.ACTIVE if self._active_id == preset.id else tk.NORMAL
+                btn.grid(column=pos % cols, row=pos//cols, padx=(3,0))
                 pos += 1
         else:
             lbl_no_presets = tk.Label(
@@ -97,8 +101,8 @@ class PresetsView:
 
         frm_settings_buttons = ttk.Frame(master=self._frm_settings, borderwidth=1,
                                                relief=tk.RIDGE)
-        self._sa_settings_buttons = ScrollableArea(frm_settings_buttons)
-        self._sa_settings_buttons.populate_content(self._populate_settings_buttons)
+        self._scroll_settings_buttons = ScrollableArea(frm_settings_buttons)
+        self._scroll_settings_buttons.populate_content(self._populate_settings_buttons)
 
         frm_settings_buttons.grid(pady=(0,6), sticky=tk.EW)
 
@@ -136,16 +140,19 @@ class PresetsView:
     def _handle_settings_close_btn_click(self):
         self._frm_settings.grid_remove()
 
-    def update_view(self, presets):
+    def update_view(self, presets, active_id=None):
         self._presets = presets
-        self._sa_preset_buttons.clear_content()
-        self._sa_preset_buttons.populate_content(self._populate_preset_buttons)
-        settings_view_open = self._frm_settings.winfo_ismapped()
-        self._sa_settings_buttons.clear_content()
-        self._sa_settings_buttons.populate_content(self._populate_settings_buttons)
-        if settings_view_open:
-            self._show_settings()
-
+        self._active_id = active_id
+        self._scroll_preset_buttons.clear_content()
+        self._scroll_preset_buttons.populate_content(self._populate_preset_buttons)
+        self._scroll_settings_buttons.clear_content()
+        self._scroll_settings_buttons.populate_content(self._populate_settings_buttons)
+    
+    def update_selected(self, active_id: str):
+        self._active_id = active_id
+        self._scroll_preset_buttons.clear_content()
+        self._scroll_preset_buttons.populate_content(self._populate_preset_buttons)
+    
 
 class ScrollableArea:
     def __init__(self, root, height=120):
@@ -173,8 +180,8 @@ class ScrollableArea:
         self._frm_main.columnconfigure(1, weight=1)
         self._frm_main.pack(expand=True, fill="both")
 
-    def populate_content(self, populate_content):
-        populate_content(self._frm_inner)
+    def populate_content(self, populate):
+        populate(self._frm_inner)
         self._frm_inner.update_idletasks()
         bbox = self._canvas.bbox(tk.ALL)
         self._canvas.configure(scrollregion=bbox, width=bbox[2]-bbox[0], height=self._height)
