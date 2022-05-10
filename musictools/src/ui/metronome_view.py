@@ -182,8 +182,7 @@ class MetronomeView(ToolView):
     def _handle_save_btn_click(self):
         preset = mt_service.metr_save_preset(
             self._ent_bpm.get(),
-            self._var_beats_option_int.get(),
-            4
+            self._var_beats_option_int.get()
         )
         if preset:
             mt_service.metr_set_active_preset(None)
@@ -198,7 +197,6 @@ class MetronomeView(ToolView):
         updated_preset = mt_service.metr_update_preset(  
             self._ent_bpm.get(),
             self._var_beats_option_int.get(),
-            4,
             active_id
         )
         if updated_preset:

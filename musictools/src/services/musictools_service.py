@@ -241,13 +241,12 @@ class MusictoolsService:
 
         return self._metr_preset_repository.get_all()
 
-    def metr_save_preset(self, bpm: int, beats_per_bar: int, beat_unit: int):
+    def metr_save_preset(self, bpm: int, beats_per_bar: int):
         """Saves a preset for the metronome.
 
         Args:
             bpm: Beats per minute as an integer.
             beats_per_bar: Beats per bar as an integer.
-            beat_unit: The beat unit of the time signature as an integer.
 
         Returns:
             The saved preset as a MetrPreset-object if the saving operation
@@ -256,7 +255,7 @@ class MusictoolsService:
 
         bpm = self._metronome.validate_bpm(bpm)
         if bpm:
-            preset = MetrPreset(bpm, beats_per_bar, beat_unit)
+            preset = MetrPreset(bpm, beats_per_bar)
             return self._metr_preset_repository.save(preset)
         return None
 
@@ -269,13 +268,12 @@ class MusictoolsService:
 
         self._metr_preset_repository.delete(preset_id)
 
-    def metr_update_preset(self, bpm: int, beats_per_bar: int, beat_unit: int, preset_id: int):
+    def metr_update_preset(self, bpm: int, beats_per_bar: int, preset_id: int):
         """Updates the values stored in a metronome preset
 
         Args:
             bpm: The new bpm value as an integer.
             beats_per_bar: The new beats per bar value as an integer.
-            beat_unit: The new beat unit value as an integer.
             preset_id: The id corresponding to the preset to be updated as an integer.
 
         Returns:
@@ -285,7 +283,7 @@ class MusictoolsService:
 
         bpm = self._metronome.validate_bpm(bpm)
         if bpm:
-            preset = MetrPreset(bpm, beats_per_bar, beat_unit, preset_id)
+            preset = MetrPreset(bpm, beats_per_bar, preset_id)
             return self._metr_preset_repository.update(preset)
         return None
 
