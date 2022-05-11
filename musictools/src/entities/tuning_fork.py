@@ -1,4 +1,5 @@
 import math
+import threading
 import sounddevice as sd
 import numpy as np
 from config import TF_BASE_A, TF_FREQ_MAX, TF_FREQ_MIN
@@ -28,6 +29,15 @@ class TuningFork:
         self._stream = None
         self._start_idx = 0
         self._note_analyzer = NoteAnalyzer(int(base_a))
+        self._is_playing = False
+        self._timer = None
+        self._clear_output = False
+
+        self._init_stream()
+
+    def _init_stream(self):
+        self._stream = sd.OutputStream(
+            channels=1, callback=self._callback, samplerate=self._sample_rate)
 
     def _callback(self, outdata, frames, time, status):
         """Callback function for the sounddevice output stream.
@@ -51,23 +61,41 @@ class TuningFork:
         section = (self._start_idx + np.arange(frames)) / self._sample_rate
         section = section.reshape(-1, 1)
         outdata[:] = np.sin(2 * np.pi * self._frequency * section)
+        if self._clear_output:
+            outdata[:] = np.zeros_like(outdata)
+        
         self._start_idx += frames
 
     def start(self):
         """Starts the tuning sound.
         """
 
-        self._stream = sd.OutputStream(
-            channels=1, callback=self._callback, samplerate=self._sample_rate)
-        self._stream.start()
+        if self._timer:
+            self._timer.cancel()
+        
+        self._clear_output = False
+        self._start_idx = 0
+        if not self._stream.active:
+            self._stream.start()
+        self._is_playing = True
 
     def stop(self):
         """Stops the tuning sound.
+
+        Stops the sound with a slight delay, to give
+        the stream callback function time to fill the output buffer
+        with silence. This prevents crunching sound
+        when stopping stream.
         """
 
-        self._stream.stop()
-        self._start_idx = 0
+        self._is_playing = False
+        self._clear_output = True
+        self._timer = threading.Timer(1, self._delayed_stop)
+        self._timer.start()
 
+    def _delayed_stop(self):
+        self._stream.stop()
+    
     def is_active(self):
         """Returns a boolean describing the tuning sound status.
 
@@ -75,8 +103,8 @@ class TuningFork:
             True if the tuning sound is playing and False otherwise.
         """
 
-        return bool(self._stream) and self._stream.active
-
+        return self._is_playing
+  
     def validate_frequency(self, freq: float):
         """Validates the frequency passed as an argument.
 
