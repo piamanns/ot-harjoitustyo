@@ -64,10 +64,12 @@ class PresetsView:
                     text=str(preset),
                     pady=5,
                 )
-                btn.configure(command=lambda value=preset.get_value(), label=preset.get_label(), preset_id=preset.id:
-                        self._handle_preset_btn_click(
-                            value, label, preset_id
-                        )
+                btn.configure(command=lambda value=preset.get_value(), 
+                    label=preset.get_label(),
+                    preset_id=preset.id,
+                    button=btn: self._handle_preset_btn_click(
+                                value, label, preset_id, button
+                            )
                 )
                 btn["state"] = tk.ACTIVE if self._active_id == preset.id else tk.NORMAL
                 btn.grid(column=pos % cols, row=pos//cols, padx=(3,0))
@@ -153,6 +155,9 @@ class PresetsView:
         self._scroll_preset_buttons.clear_content()
         self._scroll_preset_buttons.populate_content(self._populate_preset_buttons)
     
+    def deselect_buttons(self):
+        self._scroll_preset_buttons.deselect_content_widgets()
+    
 
 class ScrollableArea:
     def __init__(self, root, height=120):
@@ -189,3 +194,8 @@ class ScrollableArea:
     def clear_content(self):
         for widget in self._frm_inner.winfo_children():
             widget.destroy()
+    
+    def deselect_content_widgets(self):
+        for widget in self._frm_inner.winfo_children():
+            if isinstance(widget, tk.Button):
+                widget["state"] = tk.NORMAL

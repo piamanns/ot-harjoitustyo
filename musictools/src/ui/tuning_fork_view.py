@@ -171,11 +171,12 @@ class TuningForkView(ToolView):
     def _show_validation_error(self):
         self._show_error(f"Enter a frequency between {TF_FREQ_MIN} and {TF_FREQ_MAX} Hz")
 
-    def _handle_preset_btn_click(self, freq: float, label: str, preset_id: int):
+    def _handle_preset_btn_click(self, freq: float, label: str, preset_id: int, btn):
         freq = mt_service.tfork_set_freq(freq)
         if freq:
             mt_service.tfork_set_active_preset(preset_id)
-            self._presets_view.update_selected(preset_id)
+            self._presets_view.deselect_buttons()
+            btn["state"] = tk.ACTIVE
             self._update_tf_header(freq, label)
             self._var_entry_txt.set(str(freq))
             self._enable_update_btn()

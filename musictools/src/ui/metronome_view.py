@@ -222,12 +222,13 @@ class MetronomeView(ToolView):
     def _update_frm_beats_option(self, beats_per_bar: int):
         self._var_beats_option_int.set(beats_per_bar)
 
-    def _handle_preset_btn_click(self, beat_values: tuple, label: str, preset_id: int):
+    def _handle_preset_btn_click(self, beat_values: tuple, label: str, preset_id: int, btn):
         bpm, beats_per_bar = beat_values
         bpm = mt_service.metr_set_bpm(bpm)
         if bpm:
             mt_service.metr_set_active_preset(preset_id)
-            self._presets_view.update_selected(preset_id)
+            self._presets_view.deselect_buttons()
+            btn["state"] = tk.ACTIVE
             self._update_frm_header_bpm(bpm)
             self._var_bpm_entry_txt.set(str(bpm))
 
