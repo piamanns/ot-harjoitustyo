@@ -40,3 +40,7 @@ class ToolView:
 
     def _disable_update_btn(self):
         self._btn_update["state"] = tk.DISABLED
+    
+    def _clear_entry(self, event, entry):
+        entry.delete(0, tk.END)
+        entry.unbind('<FocusIn>')

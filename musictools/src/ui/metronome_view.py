@@ -99,6 +99,10 @@ class MetronomeView(ToolView):
 
         self._disable_update_btn()
 
+        self._ent_bpm.bind("<FocusIn>", lambda event, entry=self._ent_bpm:
+            self._clear_entry(event, entry)
+        )
+
         self._ent_bpm.grid(row=0, column=0, ipady=5)
         btn_set.grid(row=0, column=1, padx=5)
         btn_save.grid(row=0, column=2, padx=(0,5))
