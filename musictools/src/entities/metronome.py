@@ -4,15 +4,14 @@ from config import METR_CLICK_PATH, METR_CLICK_UP_PATH, METR_BPM_MAX, METR_BPM_M
 
 
 class Metronome:
-    def __init__(self, bpm=85, time_signature=(4, 4)):
+    def __init__(self, bpm=85, beats_per_bar=4):
         self._bpm = bpm
         self._wait = 0
-        self._beats_per_bar = time_signature[0]
-        self._beat_unit = time_signature[1]
+        self._beats_per_bar = beats_per_bar
         self._beat_counter = 0
         self._sample_rate = 44100
         self._stream = None
-        self._start_idx = 0
+        self._current_idx = 0
         self._prev_idx = 0
         self._click_idx = 0
         self._click_data = None
@@ -28,37 +27,44 @@ class Metronome:
     def _callback(self, outdata, frames, time, status):
         if status:
             print(time, status)
-        self._start_idx += frames
-        if self._start_idx - self._prev_idx >= self._wait and not self._play_click:
+        self._current_idx += frames
+        if self._current_idx - self._prev_idx >= self._wait and not self._play_click:
             # Time for next click
-            self._prev_idx += self._wait
-            self._click_idx = 0
-            self._play_click = True
+            self._reset_click_vars()
 
         if self._play_click:
+            # Check if it's already time for next click
+            # (fast tempo interrupts clicks mid-sound)
+            if self._current_idx >= int(self._prev_idx + self._wait):
+                self._reset_click_vars()
+                self._increase_beat_count()
+
             # Feed click to output buffer
-            # TODO: Check if next click should start partly on top of previous
-            # (for even better accuracy when tempo is fast)
-            click_data = self._click_up_data if self._beat_counter == 1 \
-                                                and self._beats_per_bar > 1 \
-                                             else self._click_data
+            click_data = self._get_click_data(self._beat_counter, self._beats_per_bar)
             chunksize = min(len(click_data) - self._click_idx, frames)
             outdata[:chunksize] = click_data[self._click_idx:self._click_idx + chunksize]
             self._click_idx += chunksize
+
             if chunksize < frames:
+                # Fill rest with silence
                 outdata[chunksize:] = 0
                 self._play_click = False
-                self.increase_beat_count()
-            # Check if it's time for next click
-            # even if previous hasn't finished playing yet (fast tempo)
-            elif self._start_idx - self._prev_idx >= self._wait:
-                self._play_click = False
-                self.increase_beat_count()
+                self._increase_beat_count()
         else:
-            # Fill output buffer with silence
+            # Fill entire output buffer with silence
             outdata.fill(0)
 
-    def increase_beat_count(self):
+    def _reset_click_vars(self):
+        self._prev_idx += self._wait
+        self._click_idx = 0
+        self._play_click = True
+
+    def _get_click_data(self, beat_count:int, beats_per_bar: int):
+        if beat_count == 1 and beats_per_bar > 1:
+            return self._click_up_data
+        return self._click_data
+
+    def _increase_beat_count(self):
         self._beat_counter += 1
         if self._beat_counter > self._beats_per_bar:
             self._beat_counter = 1
@@ -75,7 +81,7 @@ class Metronome:
     def _init_click_vars(self):
         self._beat_counter = 1
         self._wait = 60/self._bpm * self._sample_rate
-        self._start_idx = 0
+        self._current_idx = 0
         self._prev_idx = 0
         self._click_idx = 0
         # Play first click immediately:
