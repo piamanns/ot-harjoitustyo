@@ -14,8 +14,7 @@ class TfPresetRepository:
         """
 
         self._connection = connection
-        #self.__tf_presets = [(440, "A"), (293.66, "D"),
-                             #(196, "G"), (659.25, "E"), (466.16, "Bb")]
+
     def get_all(self):
         """Gets all saved tuning fork presets
 

@@ -13,7 +13,7 @@ class TuningForkView(ToolView):
         self._var_entry_txt = None
         self._var_play_txt = None
         self._ent_freq = None
-   
+
         self._initialize()
 
     def _initialize(self):
@@ -85,7 +85,7 @@ class TuningForkView(ToolView):
 
         self._disable_update_btn()
 
-        self._ent_freq.bind("<FocusIn>", lambda event, entry=self._ent_freq: 
+        self._ent_freq.bind("<FocusIn>", lambda event, entry=self._ent_freq:
             self._clear_entry(event, entry)
         )
 
@@ -153,10 +153,10 @@ class TuningForkView(ToolView):
             self._hide_error()
         else:
             self._show_validation_error()
-    
+
     def _handle_update_btn_click(self):
         active_preset_id = mt_service.tfork_get_active_preset()
-        updated_preset = mt_service.tfork_update_preset(  
+        updated_preset = mt_service.tfork_update_preset(
             self._ent_freq.get(),
             active_preset_id
         )

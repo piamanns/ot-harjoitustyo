@@ -63,7 +63,7 @@ class TuningFork:
         outdata[:] = np.sin(2 * np.pi * self._frequency * section)
         if self._clear_output:
             outdata[:] = np.zeros_like(outdata)
-        
+
         self._start_idx += frames
 
     def start(self):
@@ -72,7 +72,7 @@ class TuningFork:
 
         if self._timer:
             self._timer.cancel()
-        
+
         self._clear_output = False
         self._start_idx = 0
         if not self._stream.active:
@@ -95,7 +95,7 @@ class TuningFork:
 
     def _delayed_stop(self):
         self._stream.stop()
-    
+
     def is_active(self):
         """Returns a boolean describing the tuning sound status.
 
@@ -104,7 +104,7 @@ class TuningFork:
         """
 
         return self._is_playing
-  
+
     def validate_frequency(self, freq: float):
         """Validates the frequency passed as an argument.
 

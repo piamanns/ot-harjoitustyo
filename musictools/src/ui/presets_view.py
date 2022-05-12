@@ -13,7 +13,7 @@ class PresetsView:
         self._active_id = None
         self._handle_preset_btn_click = handle_preset_btn_click
         self._handle_preset_delete_btn_click = handle_preset_delete_btn_click
- 
+
         self._initialize()
 
     def pack(self):
@@ -64,7 +64,7 @@ class PresetsView:
                     text=str(preset),
                     pady=5,
                 )
-                btn.configure(command=lambda value=preset.get_value(), 
+                btn.configure(command=lambda value=preset.get_value(),
                     label=preset.get_label(),
                     preset_id=preset.id,
                     button=btn: self._handle_preset_btn_click(
@@ -149,15 +149,10 @@ class PresetsView:
         self._scroll_preset_buttons.populate_content(self._populate_preset_buttons)
         self._scroll_settings_buttons.clear_content()
         self._scroll_settings_buttons.populate_content(self._populate_settings_buttons)
-    
-    def update_selected(self, active_id: str):
-        self._active_id = active_id
-        self._scroll_preset_buttons.clear_content()
-        self._scroll_preset_buttons.populate_content(self._populate_preset_buttons)
-    
+
     def deselect_buttons(self):
         self._scroll_preset_buttons.deselect_content_widgets()
-    
+
 
 class ScrollableArea:
     def __init__(self, root, height=120):
@@ -178,10 +173,10 @@ class ScrollableArea:
         scrollbar = tk.Scrollbar(self._frm_main, orient=tk.VERTICAL, command=self._canvas.yview)
         scrollbar.grid(row=0, column=1, sticky=(tk.NS, tk.E))
         self._canvas.configure(yscrollcommand=scrollbar.set)
-        
+
         self._frm_inner = tk.Frame(self._canvas)
         self._canvas.create_window((0,0), window=self._frm_inner, anchor=tk.NW)
-        
+
         self._frm_main.columnconfigure(1, weight=1)
         self._frm_main.pack(expand=True, fill="both")
 
@@ -194,7 +189,7 @@ class ScrollableArea:
     def clear_content(self):
         for widget in self._frm_inner.winfo_children():
             widget.destroy()
-    
+
     def deselect_content_widgets(self):
         for widget in self._frm_inner.winfo_children():
             if isinstance(widget, tk.Button):

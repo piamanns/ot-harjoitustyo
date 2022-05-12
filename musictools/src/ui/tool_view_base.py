@@ -15,6 +15,9 @@ class ToolView:
 
     def _initialize(self):
         self._frm_main = ttk.Frame(master=self._root, borderwidth=1, relief=tk.RIDGE)
+        self._btn_update = tk.Button(
+            master=self._frm_main
+        )
 
     def pack(self):
         self._frm_main.pack(side=tk.LEFT, fill="y")
@@ -34,13 +37,13 @@ class ToolView:
 
     def _hide_error(self):
         self._lbl_error.grid_remove()
-    
+
     def _enable_update_btn(self):
         self._btn_update["state"] = tk.NORMAL
 
     def _disable_update_btn(self):
         self._btn_update["state"] = tk.DISABLED
-    
+
     def _clear_entry(self, event, entry):
         entry.delete(0, tk.END)
         entry.unbind('<FocusIn>')

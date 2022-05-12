@@ -30,13 +30,13 @@ class Metronome:
         self._current_idx += frames
         if self._current_idx - self._prev_idx >= self._wait and not self._play_click:
             # Time for next click
-            self._reset_click_vars()
+            self._update_click_vars()
 
         if self._play_click:
-            # Check if it's already time for next click
+            # Check if it's time for next click
             # (fast tempo interrupts clicks mid-sound)
             if self._current_idx >= int(self._prev_idx + self._wait):
-                self._reset_click_vars()
+                self._update_click_vars()
                 self._increase_beat_count()
 
             # Feed click to output buffer
@@ -54,7 +54,7 @@ class Metronome:
             # Fill entire output buffer with silence
             outdata.fill(0)
 
-    def _reset_click_vars(self):
+    def _update_click_vars(self):
         self._prev_idx += self._wait
         self._click_idx = 0
         self._play_click = True

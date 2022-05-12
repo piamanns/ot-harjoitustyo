@@ -195,10 +195,10 @@ class MetronomeView(ToolView):
             self._hide_error()
         else:
             self._show_validation_error()
-    
+
     def _handle_update_btn_click(self):
         active_id = mt_service.metr_get_active_preset()
-        updated_preset = mt_service.metr_update_preset(  
+        updated_preset = mt_service.metr_update_preset(
             self._ent_bpm.get(),
             self._var_beats_option_int.get(),
             active_id
@@ -249,4 +249,3 @@ class MetronomeView(ToolView):
         if mt_service.metr_get_active_preset() == preset_id:
             mt_service.metr_set_active_preset(None)
             self._disable_update_btn()
-
