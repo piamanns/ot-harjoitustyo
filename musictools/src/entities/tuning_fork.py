@@ -74,8 +74,7 @@ class TuningFork:
 
         self._clear_output = False
         self._start_idx = 0
-        if not self._stream.active:
-            self._stream.start()
+        self._stream.start()
         self._is_playing = True
 
     def stop(self):
