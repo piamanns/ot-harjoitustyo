@@ -255,7 +255,8 @@ class MusictoolsService:
 
         bpm = self._metronome.validate_bpm(bpm)
         if bpm:
-            preset = MetrPreset(bpm, beats_per_bar)
+            label = f"{beats_per_bar}-beat"
+            preset = MetrPreset(bpm, beats_per_bar, label)
             return self._metr_preset_repository.save(preset)
         return None
 
@@ -283,7 +284,8 @@ class MusictoolsService:
 
         bpm = self._metronome.validate_bpm(bpm)
         if bpm:
-            preset = MetrPreset(bpm, beats_per_bar, preset_id)
+            label = f"{beats_per_bar}-beat"
+            preset = MetrPreset(bpm, beats_per_bar, label, preset_id)
             return self._metr_preset_repository.update(preset)
         return None
 

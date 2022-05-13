@@ -39,7 +39,7 @@ class MetrPresetRepository:
             A MetrPreset-object.
         """
 
-        return MetrPreset(row["bpm"], row["bpbar"], row["id"]) if row else None
+        return MetrPreset(row["bpm"], row["bpbar"], row["label"], row["id"]) if row else None
 
     def save(self, preset):
         """Saves a preset for the Metronome.
@@ -55,8 +55,8 @@ class MetrPresetRepository:
         cursor = self._connection.cursor()
 
         cursor.execute(
-            "INSERT INTO metr_presets (bpm, bpbar) VALUES (:bpm, :bpbar)",
-            {"bpm": preset.bpm, "bpbar": preset.beats_per_bar}
+            "INSERT INTO metr_presets (bpm, bpbar, label) VALUES (:bpm, :bpbar, :label)",
+            {"bpm": preset.bpm, "bpbar": preset.beats_per_bar, "label": preset.label}
         )
         preset.id = cursor.lastrowid
         self._connection.commit()
@@ -91,8 +91,9 @@ class MetrPresetRepository:
         cursor = self._connection.cursor()
 
         cursor.execute(
-            "UPDATE metr_presets SET bpm=:bpm, bpbar=:bpbar WHERE id=:id",
-            {"bpm": preset.bpm, "bpbar": preset.beats_per_bar, "id":preset.id}
+            "UPDATE metr_presets SET bpm=:bpm, bpbar=:bpbar, label=:label WHERE id=:id",
+            {"bpm": preset.bpm, "bpbar": preset.beats_per_bar, "label": preset.label,
+            "id":preset.id}
         )
 
         self._connection.commit()

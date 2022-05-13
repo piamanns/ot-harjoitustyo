@@ -41,7 +41,7 @@ def create_tables(connection):
             id INTEGER PRIMARY KEY,
             bpm INTEGER,
             bpbar INTEGER,
-            bunit INTEGER
+            label TEXT
         );
     ''')
 
