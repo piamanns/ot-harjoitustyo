@@ -191,7 +191,10 @@ class TuningForkView(ToolView):
             self._presets_view.deselect_buttons()
             btn["state"] = tk.ACTIVE
             self._update_tf_header(freq, label)
+
             self._var_entry_txt.set(str(freq))
+            self._ent_freq.unbind("<FocusIn>")
+
             self._enable_update_btn()
             self._hide_error()
 
@@ -201,4 +204,3 @@ class TuningForkView(ToolView):
         if mt_service.tfork_get_active_preset() == preset_id:
             mt_service.tfork_set_active_preset(None)
             self._disable_update_btn()
-    

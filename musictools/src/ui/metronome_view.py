@@ -243,7 +243,9 @@ class MetronomeView(ToolView):
             self._presets_view.deselect_buttons()
             btn["state"] = tk.ACTIVE
             self._update_frm_header_bpm(bpm)
+
             self._var_bpm_entry_txt.set(str(bpm))
+            self._ent_bpm.unbind("<FocusIn>")
 
             mt_service.metr_set_beats_per_bar(beats_per_bar)
             self._update_frm_header_beats(beats_per_bar)
