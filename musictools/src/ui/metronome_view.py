@@ -7,7 +7,16 @@ from config import METR_BPM_MIN, METR_BPM_MAX, METR_BEATS_MAX, METR_BEATS_MIN, M
 
 
 class MetronomeView(ToolView):
+    """Class describing the metronome view.
+    """
+
     def __init__(self, root):
+        """The class constructor.
+
+        Args:
+            root: The Tkinter widget object containing this view.
+        """
+
         super().__init__(root)
         self._var_start_txt = None
         self._var_bpm_txt = None

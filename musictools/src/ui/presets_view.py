@@ -3,7 +3,27 @@ from tkinter import ttk
 
 
 class PresetsView:
+    """Class describing the presets view.
+
+    The view contains two scrollable areas:
+    the area with the clickable preset buttons 
+    and the area which lists the presets with corresponding Delete-buttons
+    allowing for deleting saved presets.
+    """
+
     def __init__(self, root, presets, handle_preset_btn_click, handle_preset_delete_btn_click):
+        """The class constructor.
+
+        Args:
+            root: The Tkinter widget object containing this view.
+            presets: The saved presets for the current tool as a list of preset objects
+                     corresponding to the current tool type.
+            handle_preset_btn_click: A function for handling a click on a preset
+                                    button.
+            handle_preset_delete_btn_click: A function for handling a click on a
+                                            delete button corresponding to a saved preset.
+        """
+
         self._root = root
         self._frm_main = None
         self._frm_settings = None
@@ -17,6 +37,9 @@ class PresetsView:
         self._initialize()
 
     def pack(self):
+        """Adds the view to the tkinter layout.
+        """
+
         self._frm_main.pack(expand=True, fill="both")
 
     def _initialize(self):
@@ -143,6 +166,15 @@ class PresetsView:
         self._frm_settings.grid_remove()
 
     def update_view(self, presets, active_id=None):
+        """Updates the preset view.
+
+        Args:
+            presets: The saved presets for the current tool as a list
+                     of preset objects corresponding to the current tool type.
+            active_id : An integer with the identifying id for 
+                        the currently active preset. Defaults to None.
+        """
+
         self._presets = presets
         self._active_id = active_id
         self._scroll_preset_buttons.clear_content()
@@ -151,11 +183,24 @@ class PresetsView:
         self._scroll_settings_buttons.populate_content(self._populate_settings_buttons)
 
     def deselect_buttons(self):
+        """Deselects all buttons in the preset button view.
+        """
+
         self._scroll_preset_buttons.deselect_content_widgets()
 
 
 class ScrollableArea:
+    """A helper class for creating scrollable areas with a vertical scrollbar.
+    """
+
     def __init__(self, root, height=120):
+        """The class constructor.
+
+        Args:
+            root: The tkinter widget object containing the scrollable area.
+            height: The height of the scrollable area. Defualts to 120.
+        """
+
         self._root = root
         self._frm_main = None
         self._canvas = None
@@ -181,16 +226,29 @@ class ScrollableArea:
         self._frm_main.pack(expand=True, fill="both")
 
     def populate_content(self, populate):
+        """Populates the content in the scrollable area.
+
+        Args:
+            populate: A function creating the content in the tkinter widget
+                      passed as an argument.
+        """
+
         populate(self._frm_inner)
         self._frm_inner.update_idletasks()
         bbox = self._canvas.bbox(tk.ALL)
         self._canvas.configure(scrollregion=bbox, width=bbox[2]-bbox[0], height=self._height)
 
     def clear_content(self):
+        """Clears the content in the scrollable area.
+        """
+
         for widget in self._frm_inner.winfo_children():
             widget.destroy()
 
     def deselect_content_widgets(self):
+        """Deselects all button widgets in the scrollable area.
+        """
+
         for widget in self._frm_inner.winfo_children():
             if isinstance(widget, tk.Button):
                 widget["state"] = tk.NORMAL

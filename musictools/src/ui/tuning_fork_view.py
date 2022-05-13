@@ -7,7 +7,16 @@ from config import TF_ICON_PATH, TF_FREQ_MAX, TF_FREQ_MIN
 
 
 class TuningForkView(ToolView):
+    """Class describing the tuning fork-view.
+    """
+
     def __init__(self, root):
+        """The class constructor.
+
+        Args:
+            root: The Tkinter widget object containing this view.
+        """
+
         super().__init__(root)
         self._var_freq_txt = None
         self._var_entry_txt = None

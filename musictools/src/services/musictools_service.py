@@ -292,7 +292,7 @@ class MusictoolsService:
 
         Args:
             preset_id: The id corresponding to the currently selected preset
-                      as an integer.
+                       as an integer.
         """
 
         self._metr_active_preset_id = preset_id

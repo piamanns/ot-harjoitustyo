@@ -12,7 +12,6 @@ class TuningFork:
     using the sounddevice module (https://python-sounddevice.readthedocs.io/).
     """
 
-
     def __init__(self, frequency=TF_BASE_A, base_a=TF_BASE_A):
         """The class constructor.
 

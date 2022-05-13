@@ -3,7 +3,16 @@ from tkinter import ttk
 
 
 class ToolView:
+    """A base class for the musical tool views.
+    """
+
     def __init__(self, root):
+        """The class constructor.
+
+        Args:
+            root: The Tkinter widget object containing this view.
+        """
+
         self._root = root
         self._img_tool = None
         self._frm_main = None
@@ -20,6 +29,9 @@ class ToolView:
         )
 
     def pack(self):
+        """Adds the view to the tkinter layout.
+        """
+
         self._frm_main.pack(side=tk.LEFT, fill="y")
 
     def _init_lbl_error(self):
