@@ -34,3 +34,9 @@
 - Sävelnimi tallennetaan myös automaattisesti frekvenssi-esiasetuksen label-tekstiksi, joka näytetään osana esiasetusnapin tekstiä.
 - NoteAnalyzerin käyttämän referenssi-A:n frekvenssi on asetettavissa ympäristömuuttujan avulla.
 - Lisätty NoteAnalyzerin toimintaa testaavia yksikkötestejä.
+
+## Viikko 7
+- Sovellukseen on lisätty mahdollisuus muokata ja päivittää tallennettuja esiasetuksia. Klikattuaan esiasetusnappia käyttäjä voi joko tallentaa työkalun asetuksiin tämän jälkeen tehdyt muutokset uutena esiasetuksena (Save as new) tai päivittää aktiivisen esiasetuksen (Update).
+- Ääniraudan ja metronomin esiasetusnäkymille toteutettu vierityspalkilla vieritettävät alueet, jotka luodaan uuden ScrollableArea-apuluokan avulla.
+- Metronomista ja sen esiasetuksista poistettu iskuyksikkö-parametri (beat unit), joka osoittautui tarpeettomaksi (sovelluksessa ei tehdä varsinaista tahtilajin valintaa).
+- Lisätty yksikkötestejä tallennettujen asetusten muokkaamiselle.
