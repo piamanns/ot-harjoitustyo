@@ -76,7 +76,7 @@ class TfPresetRepository:
 
         cursor.execute(
             "UPDATE tf_presets SET freq=:freq, label=:label WHERE id=:id",
-            {"freq": preset.freq, "label": preset.label, "id":preset.id}
+            {"freq": preset.freq, "label": preset.label, "id": preset.id}
         )
         self._connection.commit()
         return preset

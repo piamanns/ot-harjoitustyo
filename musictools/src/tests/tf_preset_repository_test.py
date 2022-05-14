@@ -48,3 +48,14 @@ class TestTfPresetRepository(unittest.TestCase):
         self.assertEqual(len(presets), 1)
         self.assertEqual(presets[0].freq, self.preset_b.freq)
         self.assertEqual(presets[0].label, self.preset_b.label)
+    
+    def test_updating_preset_changes_values_correctly(self):
+        saved_preset = tf_preset_repository.save(self.preset_a)
+        new_freq = 659.25
+        new_label = "E5"
+        saved_preset.freq = new_freq
+        saved_preset.label = new_label
+
+        updated_preset = tf_preset_repository.update(saved_preset)
+        self.assertEqual(updated_preset.freq, new_freq)
+        self.assertEqual(updated_preset.label, new_label)

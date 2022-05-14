@@ -58,3 +58,17 @@ class TestTfPresetRepository(unittest.TestCase):
         self.assertEqual(presets[0].beats_per_bar, self.preset_120.beats_per_bar)
         self.assertEqual(presets[1].bpm, self.preset_180.bpm)
         self.assertEqual(presets[1].beats_per_bar, self.preset_180.beats_per_bar)
+  
+    def test_updating_preset_changes_values_correctly(self):
+        saved_preset = metr_preset_repository.save(self.preset_60)
+        new_bpm = 80
+        new_beats_per_bar = 4
+        new_label = "4-beat"
+        saved_preset.bpm = new_bpm
+        saved_preset.beats_per_bar = new_beats_per_bar
+        saved_preset.label = new_label
+
+        updated_preset = metr_preset_repository.update(saved_preset)
+        self.assertEqual(updated_preset.bpm, new_bpm)
+        self.assertEqual(updated_preset.beats_per_bar, new_beats_per_bar)
+        self.assertEqual(updated_preset.label, new_label)

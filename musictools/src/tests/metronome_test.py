@@ -36,7 +36,7 @@ class TestTuningFork(unittest.TestCase):
         is_active = self.metronome.is_active()
         self.assertEqual(is_active, False)
     
-    def test_metronome_is_active_returns_correct_value_when_metrwas_started(self):
+    def test_metronome_is_active_returns_correct_value_when_metr_was_started(self):
         self.metronome.start()
         is_active = self.metronome.is_active()
         self.assertEqual(is_active, True)
@@ -48,9 +48,32 @@ class TestTuningFork(unittest.TestCase):
         is_active = self.metronome.is_active()
         self.assertEqual(is_active, False)
 
-    def test_setting_metronome_beats_per_bar_works(self):
+    def test_setting_metronome_beats_per_bar_works_correctly(self):
         self.metronome.set_beats_per_bar(7)
         bpb = self.metronome.get_beats_per_bar()
         self.assertEqual(bpb, 7)
 
+    def test_beat_count_works_correctly(self):
+        self.metronome.set_beats_per_bar(3)
+        self.metronome._increase_beat_count()
+        self.metronome._increase_beat_count()
+        self.assertEqual(self.metronome._beat_counter, 2)
+
+        self.metronome._increase_beat_count()
+        self.metronome._increase_beat_count()
+        self.assertEqual(self.metronome._beat_counter, 1)
     
+    def test_click_sound_is_swapped_on_first_beat_in_bar(self):
+        self.metronome.set_beats_per_bar(2)
+        click_data = self.metronome._get_click_data(
+            self.metronome._beat_counter,
+            self.metronome._beats_per_bar
+        )
+        self.assertEqual(click_data.all(), self.metronome._click_up_data.all())
+
+        self.metronome._increase_beat_count()
+        click_data = self.metronome._get_click_data(
+            self.metronome._beat_counter,
+            self.metronome._beats_per_bar
+        )
+        self.assertEqual(click_data.all(), self.metronome._click_data.all())
