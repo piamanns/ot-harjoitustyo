@@ -23,4 +23,14 @@
 | 25.4 | 3 | SQLite-tietokannan käyttöönotto ääniraudan ja metronomin esiasetusten tallentamiseen.
 | 1.5 | 2 | POC-toteutus sävelnimen laskemiselle annetun frekvenssin perusteella.
 | 2.5 | 4 | Sävelnimen generoimisesta vastaavan NoteAnalyzer-luokan toteutus ja liittäminen sovellukseen. Yksikkötestit uudelle luokalle.
-| yht | 76 | |
+| 6.5 | 1 | Lisätty myös beats per bar-arvo tallentumaan mukaan metronomin esiasetuksiin.
+| 7.5 | 5 | Esiasetusnäkymän nappi-alueet vieritettäviksi vierityspalkin avulla. (Tähän meni suhteettoman paljon aikaa.)
+| 8.5 | 5 | Tallennetut esiasetukset muokattaviksi. Tallennusnappeja on nyt kaksi: Save as new ja Update, joista jälkimmäinen päivitää aktiivisen esiasetuksen.
+| 10.5 | 1 | Iskuyksikön poistaminen metronomin parametrien joukosta (tarpeeton metronoin nykytoteutuksessa).
+| 11.5 | 4 | Parempi toteutus esiasetusnapin aktiivisuustilan asettamiselle (päivittäminen tuhoamisen ja uudelleenluomisen sijaan aiheuttaa vähemmän vilkkumista). Pientä metronomin ja käyttöliittymän viilausta.
+| 12.5 | 2 | Pylint-virheiden korjausta, mikä myös johti metronomin callback-funktion pilkkomiseen pienempiin osiin.
+| 13.5 | 1 | Puuttuvan docstring-dokumentaation kirjoittamista.
+| 14.5 | 4 | Viimeiset yksikkötestit. Pieniä toiminnallisuuksien viilauksia. Dokumentaatiodokumenttien päivittämistä.
+| 15.5 | 2 | Viime tingan muutos esiasetusnapin valituksi merkitsemisessä (edellinen versio ei toiminutkaan odotetusti Linux-ympäristössä.) Dokumentaation viimeistely.
+
+| yht | 98 | |
