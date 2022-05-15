@@ -28,7 +28,7 @@ class ToolView:
         self._btn_update = tk.Button(
             master=self._frm_main
         )
-        self._selection_color = "orange"
+        self._selection_color = "dark green"
 
     def pack(self):
         """Adds the view to the tkinter layout.
