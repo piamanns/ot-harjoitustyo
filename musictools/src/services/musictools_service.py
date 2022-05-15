@@ -244,6 +244,9 @@ class MusictoolsService:
     def metr_save_preset(self, bpm: int, beats_per_bar: int):
         """Saves a preset for the metronome.
 
+        Creates a label for the preset to be saved
+        from the beats per bar-value.
+
         Args:
             bpm: Beats per minute as an integer.
             beats_per_bar: Beats per bar as an integer.
