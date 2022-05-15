@@ -151,12 +151,53 @@ sequenceDiagram
     TfPresetRepository-->>MusictoolsService: presets
     MusictoolsService-->>UI: presets
     UI->>MusictoolsService: tfork_set_active_preset(None)
-    UI->>UI: presets_view.update_view(presets)
+    UI->>MusictoolsService: tfork_get_active_preset()
+    MusictoolsService->>UI: None
+    UI->>UI: presets_view.update_view(presets, None)
 ```
 
 Save-napin [tapahtumakäsittelijä](../src/ui/tuning_fork_view.py#L129) kutsuu sovelluslogiikkaluokan MusictoolsService tarjoamaa [tfork_save_preset-metodia](../src/services/musictools_service.py#L97), parametrina kenttään syötetty taajuus.  
 Sovelluslogiikka tarkistaa syötteen oikeellisuuden TuningFork-luokan [validate_frequency-metodin](../src/entities/tuning_fork.py#L80) avulla. Äänirautaluokka palauttaa hyväksytyn taajuuden sovelluslogiikkalle, joka tämän jälkeen pyytää TuningFork-luokalta taajuutta vastaavaa sävelnimeä, vastaavalla tavalla kuin viritysäänen asettamista kuvaavassa sekvenssikaaviossa. Tämän jälkeen sovelluslogiikka luo uuden [TfPreset](../src/entities/tf_preset.py)-olion, joka saa parametreikseen taajuuden ja sävelnimen, ja antaa esiasetusolion eteenpäin TfRepository-luokalle, luokan tarjoaman [save-metodin](../src/repositories/tf_preset_repository.py#L45) parametrina.  
-TfRepository palauuttaa tallennetun esiasetus-olion sovelluslogiikalle, joka välittää sen eteenpäin UI-näkymälle. UI-näkymä pyytää tämän jälkeen sovelluslogiikalta kaikkia ääniraudan tallennettuja esiasetuksia, MusictoolsService-luokan tarjoaman metodin [tfork_get_presets](../src/services/musictools_service.py#L88) avulla. Sovelluslogiikka [välittää kyselyn eteenpäin](../src/services/musictools_service.py#L95) TfRepository-luokalle, joka [hakee tallennetut esiasetukset tietokannasta](../src/repositories/tf_preset_repository.py#L19) ja palauttaa ne sovelluslogiikalle listana TfPreset-olioita. Sovelluslogiikka palauttaa oliolistan UI-näkymälle, joka tämän jälkeen nollaa sovelluslogiikan muuttujassa tallessa olevan aktiivisen esiasetusnapin arvon kutsumalla metodia [tfork_set_active_preset](../src/services/musictools_service.py#L160) parametrilla None. Lopuksi UI-näkumä päivittää esiasetusnäkymänsä kutsumalla preset-näkymää kuvaavan PresetView-luokan tarjoamaa [update_view-metodia](../src/ui/preset_view.py#L142).
+TfRepository palauuttaa tallennetun esiasetus-olion sovelluslogiikalle, joka välittää sen eteenpäin UI-näkymälle. UI-näkymä pyytää tämän jälkeen sovelluslogiikalta kaikkia ääniraudan tallennettuja esiasetuksia, MusictoolsService-luokan tarjoaman metodin [tfork_get_presets](../src/services/musictools_service.py#L88) avulla. Sovelluslogiikka [välittää kyselyn eteenpäin](../src/services/musictools_service.py#L95) TfRepository-luokalle, joka [hakee tallennetut esiasetukset tietokannasta](../src/repositories/tf_preset_repository.py#L19) ja palauttaa ne sovelluslogiikalle listana TfPreset-olioita. Sovelluslogiikka palauttaa oliolistan UI-näkymälle, joka tämän jälkeen nollaa sovelluslogiikan muuttujassa tallessa olevan aktiivisen esiasetusnapin arvon kutsumalla metodia [tfork_set_active_preset](../src/services/musictools_service.py#L160) parametrilla None. Lopuksi UI-näkymä päivittää esiasetusnäkymänsä kutsumalla preset-näkymää kuvaavan PresetView-luokan tarjoamaa [update_view-metodia](../src/ui/presets_view.py#L179), joka saa parametreikseen tallennetut esiasetukset ja tällä hetkellä aktiivisena olevan esiasetuksen id-numeron, joka tosin nyt on None.
+
+### Tallennetun viritysäänen päivittäminen:
+
+Kun käyttäjä painaa käyttöliittymässä olevaa ääniraudan esiasetusnappia, napin [tapahtumakäsittelijä](../src/ui/tuning_fork_view.py#L188) tallentaa sovelluslogiikkaolioon tiedon tällä hetkellä aktiivisena olevasta esiasetusnapista MusictoolsService-luokan tarjoaman [tfork_set_active_preset](../src/services/musictools_service.py#L160)-metodin avulla. Samalla käyttöliittymän [Update-nappi aktivoituu](../src/ui/tuning_fork_view.py#L199). Esiasetusnappi saa myös aktiivisuutta kuvaavan kehyksen.   
+Kun käyttäjä tämän jälkeen tekee ääniraudan asetuksiin muutoksia, hän voi entiseen tapaan tallentaa muutokset uutena esiasetuksena valitsemalla Save as new. Jos käyttäjä sen sijaan painaa nappia Update, kännistyy seuraava tapahtumasarja:
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI
+    participant MusictoolsService
+    User->>UI: click "Update"-button
+    UI->>MusictoolsService: tfork_get_active_preset
+    MusictoolsService-->>UI: 2
+    UI->>MusictoolsService: tfork_update_preset(523.25, 2)
+    MusictoolsService->>TuningFork: validate_frequency(523.25)
+    TuningFork-->>MusictoolsService: 523.25
+    MusictoolsService->>TuningFork: get_note_name(523.25)
+    TuningFork->>NoteAnalyzer: get_note_name(523.25)
+    NoteAnalyzer-->>TuningFork: "C5"
+    TuningFork-->>MusictoolsService: "C5"
+    MusictoolsService->>preset: TfPreset(523.25, "C5", 2)
+    MusictoolsService->>TfPresetRepository: update(preset):
+    TfPresetRepository-->>MusictoolsService: preset
+    MusictoolsService -->>UI: preset
+    UI->>MusictoolsService: tfork_get_presets()
+    MusictoolsService->>TfPresetRepository: get_all()
+    TfPresetRepository-->>MusictoolsService: presets
+    MusictoolsService-->>UI: presets
+    UI->>MusictoolsService: tfork_get_active_preset()
+    MusictoolsService-->>UI: 2
+    UI->>UI: presets_view.update_view(presets, 2)
+ ```
+
+Update-napin [tapahtumakäsittelijä](../src/ui/tuning_fork_view.py#L167) kutsuu sovelluslogiikkaluokan MusictoolsService tarjoamaa [tfork_update_preset-metodia](../src/services/musictools_service.py#L129), parametrina kenttään syötetty taajuus.  
+Taajuuden oikeellisuuden tarkistaminen ja taajutta vastaavan sävelnimen luominen tapahtuu vastaavasti kuin yllä olevissa viritysäänen asettamista ja tallentamista kuvaavissa sekvenssikaaviossa.  
+Sovelluslogiikka luo tämän jälkeen [uuden TfPreset-olion](../src/services/musictools_service.py#L144), joka saa parametreikseen päivitetyn taajuuden ja sävelnimen, mutta saman id-numeron kuin päivitettävällä esiasetuksella. Sovelluslogiikka kutsuu TfRepository-luokan tarjoamaa metodia [update](../src/repositories/tf_preset_repository.py#L65) ja antaa sille parametriksi päivitetyn TfPreset-olion. TfRepository-luokka päivittää tietokannasta vastaavalla id-numerolla löytyvän esiasetuksen, ja palauttaa päivitetyn TfPreset-olion MusictoolsService-oliolle, joka puolestaan palauttaa sen UI-näkymälle.
+Tämän jälkeen tapahtuva UI-näkymän päivitys tapahtuu vastaavalla tavalla kuin esiasetuksen tallennuksen yhteydessä, sillä erotuksella, että aktiivisena olevan esiasetusnapin arvoa ei tällä kertaa nollata. Preset-näkymää kuvaavan PresetView-luokan [update_view-metodi](../src/ui/presets_view.py#L179) saakin nyt parametrikseen juuri muokatun esiasetuksen id-numeron.
+
 
 ### Tallennetun viritysäänen poistaminen:
 
