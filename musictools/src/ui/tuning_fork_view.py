@@ -127,7 +127,8 @@ class TuningForkView(ToolView):
             self._frm_presets,
             presets,
             self._handle_preset_btn_click,
-            self._handle_preset_delete_btn_click
+            self._handle_preset_delete_btn_click,
+            self._selection_color
         )
         self._presets_view.pack()
         self._frm_presets.grid(sticky=(tk.EW))
@@ -189,9 +190,9 @@ class TuningForkView(ToolView):
         if freq:
             mt_service.tfork_set_active_preset(preset_id)
             self._presets_view.deselect_buttons()
-            btn["state"] = tk.ACTIVE
-            self._update_tf_header(freq, label)
+            btn["highlightbackground"] = self._selection_color
 
+            self._update_tf_header(freq, label)
             self._var_entry_txt.set(str(freq))
             self._ent_freq.unbind("<FocusIn>")
 

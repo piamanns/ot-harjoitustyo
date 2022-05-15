@@ -6,12 +6,14 @@ class PresetsView:
     """Class describing the presets view.
 
     The view contains two scrollable areas:
-    the area with the clickable preset buttons 
-    and the area which lists the presets with corresponding Delete-buttons
+    - the area with the clickable preset buttons
+    - the area which lists the presets with corresponding Delete-buttons
     allowing for deleting saved presets.
     """
 
-    def __init__(self, root, presets, handle_preset_btn_click, handle_preset_delete_btn_click):
+    def __init__(self, root, presets,
+                 handle_preset_btn_click, handle_preset_delete_btn_click,
+                 selection_color):
         """The class constructor.
 
         Args:
@@ -22,6 +24,8 @@ class PresetsView:
                                     button.
             handle_preset_delete_btn_click: A function for handling a click on a
                                             delete button corresponding to a saved preset.
+            selection_color: A string representing the color used for highlighting
+                             the selected preset button.
         """
 
         self._root = root
@@ -33,6 +37,8 @@ class PresetsView:
         self._active_id = None
         self._handle_preset_btn_click = handle_preset_btn_click
         self._handle_preset_delete_btn_click = handle_preset_delete_btn_click
+        self._selection_color = selection_color
+        self._original_btn_color = ""
 
         self._initialize()
 
@@ -60,6 +66,8 @@ class PresetsView:
             command=self._handle_settings_open_btn_click
         )
 
+        self._original_btn_color = btn_settings_open["highlightbackground"]
+
         lbl_presets.pack(side=tk.LEFT)
         btn_settings_open.pack(side=tk.LEFT, padx=5)
         frm_presets_header.grid(pady=(0,3), sticky=tk.W)
@@ -85,7 +93,7 @@ class PresetsView:
                 btn = tk.Button(
                     master=root,
                     text=str(preset),
-                    pady=5,
+                    pady=5
                 )
                 btn.configure(command=lambda value=preset.get_value(),
                     label=preset.get_label(),
@@ -94,7 +102,10 @@ class PresetsView:
                                 value, label, preset_id, button
                             )
                 )
-                btn["state"] = tk.ACTIVE if self._active_id == preset.id else tk.NORMAL
+                if self._active_id == preset.id:
+                    btn["highlightbackground"] = self._selection_color
+                else:
+                    btn["highlightbackground"] = self._original_btn_color
                 btn.grid(column=pos % cols, row=pos//cols, padx=(3,0))
                 pos += 1
         else:
@@ -171,7 +182,7 @@ class PresetsView:
         Args:
             presets: The saved presets for the current tool as a list
                      of preset objects corresponding to the current tool type.
-            active_id : An integer with the identifying id for 
+            active_id : An integer with the identifying id for
                         the currently active preset. Defaults to None.
         """
 
@@ -186,7 +197,7 @@ class PresetsView:
         """Deselects all buttons in the preset button view.
         """
 
-        self._scroll_preset_buttons.deselect_content_widgets()
+        self._scroll_preset_buttons.deselect_content_widgets(self._original_btn_color)
 
 
 class ScrollableArea:
@@ -245,10 +256,10 @@ class ScrollableArea:
         for widget in self._frm_inner.winfo_children():
             widget.destroy()
 
-    def deselect_content_widgets(self):
+    def deselect_content_widgets(self, orig_color):
         """Deselects all button widgets in the scrollable area.
         """
 
         for widget in self._frm_inner.winfo_children():
             if isinstance(widget, tk.Button):
-                widget["state"] = tk.NORMAL
+                widget["highlightbackground"] = orig_color

@@ -21,12 +21,14 @@ class ToolView:
         self._lbl_error = None
         self._var_error_txt = None
         self._btn_update = None
+        self._selection_color = None
 
     def _initialize(self):
         self._frm_main = ttk.Frame(master=self._root, borderwidth=1, relief=tk.RIDGE)
         self._btn_update = tk.Button(
             master=self._frm_main
         )
+        self._selection_color = "orange"
 
     def pack(self):
         """Adds the view to the tkinter layout.

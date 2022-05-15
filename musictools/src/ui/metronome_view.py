@@ -165,7 +165,8 @@ class MetronomeView(ToolView):
             self._frm_presets,
             presets,
             self._handle_preset_btn_click,
-            self._handle_preset_delete_btn_click
+            self._handle_preset_delete_btn_click,
+            self._selection_color
         )
         self._presets_view.pack()
         self._frm_presets.grid(sticky=(tk.W, tk.E))
@@ -241,9 +242,9 @@ class MetronomeView(ToolView):
         if bpm:
             mt_service.metr_set_active_preset(preset_id)
             self._presets_view.deselect_buttons()
-            btn["state"] = tk.ACTIVE
-            self._update_frm_header_bpm(bpm)
+            btn["highlightbackground"] = self._selection_color
 
+            self._update_frm_header_bpm(bpm)
             self._var_bpm_entry_txt.set(str(bpm))
             self._ent_bpm.unbind("<FocusIn>")
 
