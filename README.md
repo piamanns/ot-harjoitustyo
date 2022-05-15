@@ -2,7 +2,7 @@
 
 Sovellus sisältää kaksi muusiikin harrastajalle hyödyllistä työkalua: viritysäänen tuottavan digitaalisen **ääniraudan** ja **metronomin**.
 
-[Viikon 6 GitHub Release](https://github.com/piamanns/ot-harjoitustyo/releases/tag/viikko6)
+[Loppupalautuksen GitHub Release](https://github.com/piamanns/ot-harjoitustyo/releases/tag/loppupalautus)
 
 ## Python-versio
 
@@ -10,8 +10,10 @@ Sovelluksen toimivuus on testattu Python-versiolla 3.8.
 
 ## Dokumentaatio
 
+- [Käyttöohje](/musictools/dokumentaatio/kayttoohje.md)
 - [Vaatimusmäärittely](/musictools/dokumentaatio/vaatimusmaarittely.md) 
-- [Arkkitehtuurikuvaus](musictools/dokumentaatio/arkkitehtuuri.md)
+- [Arkkitehtuurikuvaus](/musictools/dokumentaatio/arkkitehtuuri.md)
+- [Testausdokumentti](/musictools/dokumentaatio/testaus.md)
 - [Työaikakirjanpito](/musictools/dokumentaatio/tyoaikakirjanpito.md)
 - [Changelog](/musictools/dokumentaatio/changelog.md)
 
