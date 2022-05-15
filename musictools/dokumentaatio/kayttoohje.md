@@ -75,7 +75,11 @@ Taajuuden voi myös asettaa esiasetusnappia painamalla, jos esiasetuksia on tall
 
 Viritysääni käynnistyy painamalla nappia _Play_ ja pysähtyy painamalla samaa nappia uudestaan.
 
-Taajuuskentässä näkyvän arvon voi tallentaa esiasetukseksi _Save_-nappia painamalla. Sovellus generoi automaattisesti taajuudelle sävelnimen, joka tallentuu esiasetuksen nimeksi. Nimi lasketaan tasavireisen asteikon mukaan, ympäristömuuttujana asetettavissa olevan a-sävelen pohjalta.
+Taajuuskentässä näkyvän arvon voi tallentaa uudeksi esiasetukseksi _Save as new_-nappia painamalla. Sovellus generoi automaattisesti taajuudelle sävelnimen, joka tallentuu esiasetuksen nimeksi. Nimi lasketaan tasavireisen asteikon mukaan, ympäristömuuttujana asetettavissa olevan a-sävelen pohjalta.
+
+Tallennetun esiasetuksen arvoja voi muuttaa painamalla kyseistä esiasetusnappia. Tämän jälkeen työkalun arvoihin tehdyt muutokset voi tallentaa samaan esiasetukseen painamalla nappia _Update_. Esiasetus, johon Update-napin päivitystoiminto kohdistuu, on merkitty vihreällä kehyksellä.
+
+![Sovellusnäkymä, jossa päivitettävä esiasetusnappi on merkitty vihreällä.](./kuvat/musictools_update_preset.png)
 
 Tallennettuja esiasetuksia voi poistaa painamalla _Manage_-nappia. Tällöin avautuu uusi näkymä, jossa tallennetut esiasetukset ovat listattu. Esiasetuksen voi poistaa painamalla esiasetuksen nimen vieressä olevaa _Delete_-nappia.
 
@@ -85,12 +89,10 @@ Esiasetusten hallinointinäkymä suljetaan painamalla nappia _Close_.
 
 ### Metronomi
 
-Metronomille voi asettaa bpm-arvon (eli iskujen määrän minuutissa) kirjoittamalla kokonaisluku kenttään _(enter bpm)_ ja painamalla nappia _Set_.
+Metronomille voi asettaa bpm-arvon (eli iskujen määrän minuutissa) kirjoittamalla kokonaisluvun kenttään _(enter bpm)_ ja painamalla nappia _Set_.
 
 _Beats per bar_-pudotusvalikosta voi valita iskujen määrän tahdissa, jolloin metronomi painottaa tahtien ensimmäiset iskut erilaisella klikkiäänellä. Jos pudotusvalikossa on valittuna arvo 1, painotusta ei tehdä. 
 
 Metronomi käynnistyy _Start_-nappia painamalla ja pysähtyy, kun samaa nappia painaa uudestaan.
-
-Metronomin esiasetusten tallentaminen ja poistaminen toimii vastavalla tavalla kun äänirautanäkymässä.
-
-Metronomin esiasetuksille ei toistaiseksi tallennu bpm-arvon lisäksi muuta nimeä.
+ 
+Metronomin esiasetusten tallentaminen, muokkaaminen ja poistaminen toimii vastavalla tavalla kun äänirautanäkymässä. Metronomin esiasetuksiin tallentuu sekä bpm-arvo että valittuna oleva beats per bar-arvo.
