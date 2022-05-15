@@ -15,17 +15,17 @@ Testauksen yhteydessä MusictoolsService-olio käyttää repositorioina luokista
 
 ### Repositiorioluokat
 
-Repositorioluokkia TfPresetRepository ja MetrPresetRepository testeissä käytetään erillistä testitietokantaa, jonka tiedostonimi on konfiguroitavissa .env.test-tiedostossa.   
+Repositorioluokkien TfPresetRepository ja MetrPresetRepository testeissä käytetään erillistä testitietokantaa, jonka tiedostonimi on konfiguroitavissa .env.test-tiedostossa.   
 TfPresetRepository-luokkaa testataan [TestTfPresetRepository](../src/tests/tf_preset_repository_test.py)-testiluokalla ja MetrPresetRepository-luokkaa vastaavasti [MetrPresetRepository](../src/tests/metr_preset_repository_test.py)-testiluokalla.
 
 ### Testauskattavuus
 
 Sovelluksen testauksen haarautumakattavuus on 83%. Käyttöliittymäkerros on jätetty testauksen ulkopuolelle.
 
-![Kuvakaappaus haarautumakattavuusraportista](./kuvat/musictools_coverage-report.png.png)
+![Kuvakaappaus haarautumakattavuusraportista](./kuvat/musictools_coverage-report.png)
 
 Ääniraudassa ja metronomissa testaamatta jäivät muun muassa ulkopuolisen sounddevice-moduuliin liittyviä toimintoja.  
-MusictoolsService-sovelluslogiikkaluokan haarautumakattavuutta laskee se, että metodit, jotka vain välittävät eteenpäin ääniraudan ja metronomin palauttamia arvoja, joiden oikeellisuutta testataan jo työkalujen omissa testeissä, on jättety sovelluslogiikkaluokan testeistä pois.
+MusictoolsService-sovelluslogiikkaluokan haarautumakattavuutta laskee osittain se, että metodit, jotka pelkästään välittävät eteenpäin ääniraudan ja metronomin palauttamia arvoja, joiden oikeellisuutta testataan jo työkalujen omissa testeissä, on jätettty sovelluslogiikkaluokan testeistä pois.
 
 
 ## Järjestelmätestaus
@@ -38,7 +38,7 @@ Sovellus on ladattu, asennettu ja käynnistetty [käyttöohjeen](./kayttoohje.md
 
 ### Toiminnallisuudet
 
-Kaikki [määrittelydokumentissa](./vaatimusmaarittely.md) ja [käyttöohjeissa](./kayttoohje.md) mainitut toiminnallisuudet on testattu manuaalisesti. Syötteiden antamisen yhteydessä on myös tarkistettu sovelluksen toiminta virheellisillä syötteillä, kuten vääräntyyppisillä syötteillä tai liian pienillä tai isoilla arvoilla.
+Kaikki [määrittelydokumentissa](./vaatimusmaarittely.md) ja [käyttöohjeissa](./kayttoohje.md) mainitut toiminnallisuudet on testattu manuaalisesti. Syötteiden antamisen yhteydessä on myös tarkistettu sovelluksen toimivuus virheellisillä syötteillä, kuten vääräntyyppisillä syötteillä tai liian pienillä tai isoilla arvoilla.
 
 ### Sovellukseen jääneet laatuongelmat
 
