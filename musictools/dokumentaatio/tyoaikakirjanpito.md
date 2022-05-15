@@ -32,5 +32,4 @@
 | 13.5 | 1 | Puuttuvan docstring-dokumentaation kirjoittamista.
 | 14.5 | 4 | Viimeiset yksikkötestit. Pieniä toiminnallisuuksien viilauksia. Dokumentaatiodokumenttien päivittämistä.
 | 15.5 | 2 | Viime tingan muutos esiasetusnapin valituksi merkitsemisessä (edellinen versio ei toiminutkaan odotetusti Linux-ympäristössä.) Dokumentaation viimeistely.
-
 | yht | 98 | |
